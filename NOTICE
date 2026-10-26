@@ -10,3 +10,9 @@ https://opendatacommons.org/licenses/by/1-0/ — the full licence text is inside
 All derived datasets in data/ and pipeline/ (cleaned deliveries, fantasy scores, features, audits,
 model predictions) are derived from that data. Fantasy points use this project's own scoring rules;
 they are not official Dream11 or IPL figures.
+
+Trademarks and affiliation
+IPL DecisionLab is an independent project. It is not affiliated with, endorsed by or sponsored by
+the Board of Control for Cricket in India (BCCI), the Indian Premier League, any IPL franchise, or
+Dream11. "IPL", "Indian Premier League", franchise names and "Dream11" are trademarks of their
+respective owners and are used only to describe the data and the style of scoring.

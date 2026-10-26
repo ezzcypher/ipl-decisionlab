@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.1.1 — security hardening (branch `release/portfolio`)
+
+- `.streamlit/config.toml`: `showErrorDetails = false`, so the public app no longer shows tracebacks or server paths.
+- CSV downloads neutralise spreadsheet formula injection (`components/ui.csv_safe`): text cells starting with
+  `= + - @` TAB or CR get a leading apostrophe; numeric columns are unchanged. Two new tests.
+- README and NOTICE: trademark and non-affiliation disclaimer (BCCI, IPL, franchises, Dream11). Cricsheet ODC-By
+  attribution unchanged.
+
 ## v2.1 — GitHub portfolio release (branch `release/portfolio`)
 
 ### Added

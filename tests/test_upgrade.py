@@ -194,6 +194,24 @@ def test_upload_size_is_limited():
     assert "maxUploadSize = 5" in cfg
 
 
+def test_public_app_hides_error_details():
+    import tomllib
+    cfg = tomllib.loads((ROOT / ".streamlit" / "config.toml").read_text())
+    assert cfg["client"]["showErrorDetails"] is False
+
+
+def test_csv_export_neutralises_formulas():
+    from components.ui import csv_safe
+    df = pd.DataFrame({"player": ["=HYPERLINK(\"x\")", "+1", "-2+3", "@SUM(A1)", "\tcmd", "V Kohli", None],
+                       "pts": [-4.0, 1, 2, 3, 4, 5, 6]})
+    out = csv_safe(df)
+    assert out.player.tolist()[:5] == ["'=HYPERLINK(\"x\")", "'+1", "'-2+3", "'@SUM(A1)", "'\tcmd"]
+    assert out.player.iloc[5] == "V Kohli" and pd.isna(out.player.iloc[6])
+    assert out.pts.tolist() == df.pts.tolist()           # numbers, incl. negatives, unchanged
+    assert df.player.iloc[0].startswith("=")             # input not mutated
+    assert csv_safe(pd.DataFrame(columns=["=evil"])).columns[0] == "'=evil"
+
+
 # ---------------------------------------------------------------- tables
 def test_table_component_formatting():
     from components.ui import _fmt

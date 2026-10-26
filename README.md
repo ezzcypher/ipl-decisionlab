@@ -12,6 +12,9 @@ Built on 19 IPL seasons (18 Apr 2008 – 31 May 2026) of Cricsheet data: 295,557
 > shown are **retrospective** (made for past matches with information available before each match); the app makes
 > **no live forecasts**.
 
+> **Independent project.** Not affiliated with, endorsed by or sponsored by the BCCI, the Indian Premier League, any
+> IPL franchise, or Dream11. See [Licence and attribution](#licence-and-attribution).
+
 ![Executive overview, dark theme](docs/screenshots/overview_dark.png)
 
 | | |
@@ -234,3 +237,9 @@ listed in [`docs/DATA.md`](docs/DATA.md). Version history: [`CHANGELOG.md`](CHAN
 
 Data: [Cricsheet](https://cricsheet.org), Open Data Commons Attribution License (ODC-By 1.0) — see [`NOTICE`](NOTICE).
 Code licence: *not yet chosen by the author.*
+
+Trademarks and affiliation: IPL DecisionLab is an independent portfolio project. It is not affiliated with, endorsed by
+or sponsored by the Board of Control for Cricket in India (BCCI), the Indian Premier League, any IPL franchise, or Dream11.
+"IPL", "Indian Premier League", franchise names and "Dream11" are trademarks of their respective owners and are used here
+only to describe the data and the style of scoring. Fantasy points are computed with this project's own rules and are not
+official Dream11 or IPL figures.

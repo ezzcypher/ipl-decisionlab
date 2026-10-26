@@ -8,7 +8,7 @@ font = "sans serif"
 
 [client]
 toolbarMode = "minimal"
-showErrorDetails = true
+showErrorDetails = false  # public app: don't show tracebacks or server paths to visitors
 
 [server]
 headless = true

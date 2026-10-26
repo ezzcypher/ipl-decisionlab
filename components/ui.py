@@ -94,8 +94,23 @@ def empty_or(df, msg="No rows match the current filters."):
     return False
 
 
+_FORMULA_START = ("=", "+", "-", "@", "\t", "\r")
+
+
+def csv_safe(df):
+    """Neutralise spreadsheet formula injection (OWASP CSV injection): text cells that start with
+    = + - @ TAB or CR get a leading apostrophe. Numeric columns are untouched, so negative numbers stay numbers."""
+    out = df.copy()
+    for c in out.columns:
+        if not (pd.api.types.is_object_dtype(out[c]) or pd.api.types.is_string_dtype(out[c])):
+            continue
+        out[c] = out[c].map(lambda v: "'" + v if isinstance(v, str) and v.startswith(_FORMULA_START) else v)
+    out.columns = [("'" + c) if isinstance(c, str) and c.startswith(_FORMULA_START) else c for c in out.columns]
+    return out
+
+
 def download(df, name, label="Download CSV", key=None):
-    st.download_button(label, df.to_csv(index=False).encode(), file_name=f"{name}.csv", mime="text/csv",
+    st.download_button(label, csv_safe(df).to_csv(index=False).encode(), file_name=f"{name}.csv", mime="text/csv",
                        key=key or f"dl_{name}", width="content")
 
 
