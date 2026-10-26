@@ -15,7 +15,7 @@ sys.path.insert(0, str(APP))
 from core import scoring  # single scoring implementation used by the app
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--recovery", default=str(APP.parent / "recovery"))
+ap.add_argument("--recovery", default=str(APP / "pipeline"), help="pipeline workspace (default: ./pipeline)")
 REC = Path(ap.parse_args().recovery).resolve()
 sys.path.insert(0, str(REC / "src"))
 import rebuild as rb  # verified Stage B pipeline (byte-identical Phase 2/3/4)
@@ -291,24 +291,29 @@ schema = schema.merge(pd.DataFrame({"column": p2_file_cols, "cleaned_dtype": [st
 schema["change"] = np.where(schema.raw_dtype.isna(), "added", np.where(schema.raw_dtype != schema.cleaned_dtype, "dtype changed", "unchanged"))
 save(schema, "audit_schema")
 
-with zipfile.ZipFile(REC / "source" / "IPL_DecisionLab_Recovered.zip") as z:
-    inv_rows = [{"file": i.filename, "size_mb": round(i.file_size / 2**20, 3)} for i in z.infolist()]
-inventory = pd.DataFrame(inv_rows)
-role = {"ipl_male_csv2 (1).zip": "Raw Cricsheet data (source of truth)",
-        "IPL_DecisionLab_Phase2_Cleaned.csv": "Phase 2 original — verified (rebuilt byte-identical)",
-        "IPL_DecisionLab_Team_Standardized.csv": "Phase 4 original — verified (rebuilt byte-identical)",
-        "IPL_DecisionLab_Phase3_PlayerMatch_Points.csv": "Phase 3 original — verified (rebuilt byte-identical)",
-        "IPL_DecisionLab_pm_reconstructed.csv": "Reconstruction — superseded (wrong scoring rules)",
-        "IPL_DecisionLab_Phase5_Final_Features.csv": "Built on reconstruction — superseded",
-        "IPL_DecisionLab_features_reconstructed.csv": "Duplicate of Phase 5 file — superseded",
-        "IPL_DecisionLab_Phase6_Audit_Report.json": "Old Phase 6 report — partly reproduced",
-        "IPL_DecisionLab_Phase6_Final_Consistency_Audit.txt": "Old Phase 6 report — partly reproduced",
-        "IPL_DecisionLab_Player_Mapping_Audit.csv": "Old mapping audit (1 row) — superseded by registry audit"}
-inventory["role"] = inventory["file"].map(lambda f: role.get(f, "Duplicate copy" if "(1)" in f else "Not part of IPL DecisionLab"))
-missing_files = ["IPL_DecisionLab_Phase6_Actual_vs_Predicted.png", "IPL_DecisionLab_Phase6_Residuals.png",
-                 "IPL_DecisionLab_Phase6_Feature_Importances.png", "original XGBoost model file", "original Phase 3–6 notebook code"]
-inventory = pd.concat([inventory, pd.DataFrame({"file": missing_files, "size_mb": np.nan, "role": "MISSING from recovered archive"})])
-inventory.to_csv(DATA / "audit_inventory.csv", index=False)
+recovered_zip = REC / "source" / "IPL_DecisionLab_Recovered.zip"
+if not recovered_zip.exists() and (DATA / "audit_inventory.csv").exists():
+    inv_rows = None  # recovered archive is not in the repo: keep the inventory recorded when it was audited
+else:
+    with zipfile.ZipFile(recovered_zip) as z:
+        inv_rows = [{"file": i.filename, "size_mb": round(i.file_size / 2**20, 3)} for i in z.infolist()]
+if inv_rows is not None:
+    inventory = pd.DataFrame(inv_rows)
+    role = {"ipl_male_csv2 (1).zip": "Raw Cricsheet data (source of truth)",
+            "IPL_DecisionLab_Phase2_Cleaned.csv": "Phase 2 original — verified (rebuilt byte-identical)",
+            "IPL_DecisionLab_Team_Standardized.csv": "Phase 4 original — verified (rebuilt byte-identical)",
+            "IPL_DecisionLab_Phase3_PlayerMatch_Points.csv": "Phase 3 original — verified (rebuilt byte-identical)",
+            "IPL_DecisionLab_pm_reconstructed.csv": "Reconstruction — superseded (wrong scoring rules)",
+            "IPL_DecisionLab_Phase5_Final_Features.csv": "Built on reconstruction — superseded",
+            "IPL_DecisionLab_features_reconstructed.csv": "Duplicate of Phase 5 file — superseded",
+            "IPL_DecisionLab_Phase6_Audit_Report.json": "Old Phase 6 report — partly reproduced",
+            "IPL_DecisionLab_Phase6_Final_Consistency_Audit.txt": "Old Phase 6 report — partly reproduced",
+            "IPL_DecisionLab_Player_Mapping_Audit.csv": "Old mapping audit (1 row) — superseded by registry audit"}
+    inventory["role"] = inventory["file"].map(lambda f: role.get(f, "Duplicate copy" if "(1)" in f else "Not part of IPL DecisionLab"))
+    missing_files = ["IPL_DecisionLab_Phase6_Actual_vs_Predicted.png", "IPL_DecisionLab_Phase6_Residuals.png",
+                     "IPL_DecisionLab_Phase6_Feature_Importances.png", "original XGBoost model file", "original Phase 3–6 notebook code"]
+    inventory = pd.concat([inventory, pd.DataFrame({"file": missing_files, "size_mb": np.nan, "role": "MISSING from recovered archive"})])
+    inventory.to_csv(DATA / "audit_inventory.csv", index=False)
 
 tn = pd.concat([raw[["batting_team", "season"]].rename(columns={"batting_team": "name"}).assign(role="batting"),
                 raw[["bowling_team", "season"]].rename(columns={"bowling_team": "name"}).assign(role="bowling")])

@@ -1,0 +1,87 @@
+================================================================================
+IPL DECISIONLAB: PHASE 6 - FINAL CONSISTENCY AUDIT REPORT
+================================================================================
+Document Class: Quality Assurance, Verification & Validation
+Release Date: 2026-10-21
+Status: APPROVED
+
+--------------------------------------------------------------------------------
+1. PHYSICAL FILE EXISTENCE CHECKS
+--------------------------------------------------------------------------------
+- Actual vs. Predicted Plot (/content/IPL_DecisionLab_Phase6_Actual_vs_Predicted.png):
+  * Status: PASS
+  * Size: 530347 bytes
+- Residual Diagnostics Plot (/content/IPL_DecisionLab_Phase6_Residuals.png):
+  * Status: PASS
+  * Size: 1247825 bytes
+- Feature Importance Plot (/content/IPL_DecisionLab_Phase6_Feature_Importances.png):
+  * Status: PASS
+  * Size: 274101 bytes
+- Structured JSON Audit Report (/content/IPL_DecisionLab_Phase6_Audit_Report.json):
+  * Status: PASS
+  * Size: 4454 bytes
+
+--------------------------------------------------------------------------------
+2. RE-EVALUATED TEST METRICS COMPARISON (OUT-OF-SAMPLE TEST SET: 2024-2026)
+--------------------------------------------------------------------------------
+Evaluation metrics calculated strictly on the identical unseen test records:
+
+- XGBoost Champion:
+  * MAE:  23.1815
+  * RMSE: 29.5706
+  * R²:   0.0007
+
+- Overall Training Median Heuristic:
+  * MAE:  23.0146
+  * RMSE: 29.9955
+  * R²:   -0.0283
+
+- Last Match Heuristic:
+  * MAE:  30.988
+  * RMSE: 40.6113
+  * R²:   -0.8849
+
+- 3-Match Rolling Average Heuristic:
+  * MAE:  25.8809
+  * RMSE: 32.9903
+  * R²:   -0.2438
+
+--------------------------------------------------------------------------------
+3. MUTUAL EXCLUSIVITY OF PARTITIONS AUDIT
+--------------------------------------------------------------------------------
+- Training Match IDs:   876
+- Validation Match IDs: 148
+- Testing Match IDs:    219
+- Overlaps Found:
+  * Train & Val:  0
+  * Val & Test:   0
+  * Train & Test: 0
+- Mutual Exclusivity Status: PASS
+
+--------------------------------------------------------------------------------
+4. TEMPORAL SAFEGUARDS & LOOK-AHEAD PROTECTION AUDIT
+--------------------------------------------------------------------------------
+- Status: PASS
+- Verification Details: Checked player-match timelines. Feature calculations strictly use only matching dates preceding current match records. Chronological monotonicity verified on cumulative match counters.
+
+--------------------------------------------------------------------------------
+5. SUPER OVER RECORDS FILTERING SCHEME
+--------------------------------------------------------------------------------
+- Status: PASS
+- Explanation: Super Overs are identified as innings indices >= 3. A total of 175 ball-by-ball delivery rows were removed. This exclusion was consistently applied during early pipeline execution stages to ensure that zero Super Over data entries trickled down to target/predictor calculations or temporal data partitioning splits.
+- Super Over data present in engineered features check: False (Should be True)
+
+--------------------------------------------------------------------------------
+6. MODEL COMPARISON & ERROR VARIANCE RECONCILIATION
+--------------------------------------------------------------------------------
+- Status: PASS
+- Detailed Reconciliation: Due to the high structural variance inherent in individual player performance distributions across match scenarios, both XGBoost and baseline median forecasts achieve a similar Test MAE (~23.18 vs ~23.01). However, the XGBoost model reduces prediction outlier magnitudes, yielding a lower RMSE (29.57) compared to the Overall Median Baseline (29.99).
+- Chasing the single-match "Last Match Heuristic" increases prediction errors to an MAE of 30.988 and an RMSE of 40.6113.
+
+--------------------------------------------------------------------------------
+7. XGBOOST FEATURE IMPORTANCE DERIVATION AUDIT
+--------------------------------------------------------------------------------
+- Champion Feature: avg_pts_prev5
+- Attributed Importance Score: 45.29%
+- Method of Importance: XGBoost Gain-based structural split weights (Gains measures relative fractional drop in training objective functions when splitting trees on feature splits).
+- Status: PASS (Matches the reported 45.29% value exactly).
