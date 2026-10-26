@@ -1,0 +1,20 @@
+name,rows,first_season,last_season,standardized,changed
+Chennai Super Kings,63950,2008,2026,Chennai Super Kings,False
+Deccan Chargers,18073,2008,2012,Deccan Chargers,False
+Delhi Capitals,28807,2019,2026,Delhi Capitals,False
+Delhi Daredevils,37511,2008,2018,Delhi Capitals,True
+Gujarat Lions,7111,2016,2017,Gujarat Lions,False
+Gujarat Titans,18515,2022,2026,Gujarat Titans,False
+Kings XI Punjab,45129,2008,2020,Punjab Kings,True
+Kochi Tuskers Kerala,3196,2011,2011,Kochi Tuskers Kerala,False
+Kolkata Knight Riders,65260,2008,2026,Kolkata Knight Riders,False
+Lucknow Super Giants,17458,2022,2026,Lucknow Super Giants,False
+Mumbai Indians,70066,2008,2026,Mumbai Indians,False
+Pune Warriors,10900,2011,2013,Pune Warriors,False
+Punjab Kings,20700,2021,2026,Punjab Kings,False
+Rajasthan Royals,59904,2008,2026,Rajasthan Royals,False
+Rising Pune Supergiant,3828,2017,2017,Rising Pune Supergiants,True
+Rising Pune Supergiants,3195,2016,2016,Rising Pune Supergiants,False
+Royal Challengers Bangalore,56563,2008,2023,Royal Challengers Bengaluru,True
+Royal Challengers Bengaluru,10836,2024,2026,Royal Challengers Bengaluru,False
+Sunrisers Hyderabad,50462,2013,2026,Sunrisers Hyderabad,False

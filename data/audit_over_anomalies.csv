@@ -1,0 +1,9 @@
+match_id,innings,over,legal_balls,deliveries,start_date,season,issue
+335988,2,13,0,1,2008-04-22,2007/08,no legal ball recorded
+335994,2,10,7,8,2008-04-27,2007/08,more than 6 legal balls
+392198,2,10,7,7,2009-04-28,2009,more than 6 legal balls
+419155,1,18,7,9,2010-04-15,2009/10,more than 6 legal balls
+548335,2,19,0,1,2012-04-22,2012,no legal ball recorded
+548377,2,18,0,1,2012-05-20,2012,no legal ball recorded
+980911,2,18,0,1,2016-04-14,2016,no legal ball recorded
+1136564,2,11,7,7,2018-04-09,2018,more than 6 legal balls

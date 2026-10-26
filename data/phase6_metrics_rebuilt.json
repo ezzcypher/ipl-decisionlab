@@ -1,0 +1,176 @@
+{
+  "label": "REBUILT \u2014 retrained with documented settings; NOT an exact reproduction of the original Phase 6 run",
+  "metrics": {
+    "val": {
+      "Median baseline (train median)": {
+        "mae": 24.072688564476884,
+        "rmse": 32.459447374289695,
+        "r2": -0.032145968028937544,
+        "n": 3288
+      },
+      "Last-match baseline": {
+        "mae": 32.315237226277375,
+        "rmse": 43.32319534459779,
+        "r2": -0.838653272218018,
+        "n": 3288
+      },
+      "3-match rolling-average baseline": {
+        "mae": 27.645985401459853,
+        "rmse": 35.459513226557355,
+        "r2": -0.23175523319582503,
+        "n": 3288
+      },
+      "Ridge regression": {
+        "mae": 24.75361656354676,
+        "rmse": 31.750929226092836,
+        "r2": 0.012421203578718898,
+        "n": 3288
+      },
+      "Random forest": {
+        "mae": 24.820213521579088,
+        "rmse": 31.935155315319395,
+        "r2": 0.000927643797263733,
+        "n": 3288
+      },
+      "XGBoost": {
+        "mae": 24.74590040268399,
+        "rmse": 31.904423331536996,
+        "r2": 0.0028495822873852994,
+        "n": 3288
+      }
+    },
+    "test": {
+      "Median baseline (train median)": {
+        "mae": 24.057892628205128,
+        "rmse": 32.62662401400552,
+        "r2": -0.039784527133198244,
+        "n": 4992
+      },
+      "Last-match baseline": {
+        "mae": 32.940104166666664,
+        "rmse": 44.03418120714104,
+        "r2": -0.8939954205902014,
+        "n": 4992
+      },
+      "3-match rolling-average baseline": {
+        "mae": 27.551883012820515,
+        "rmse": 35.68123310914939,
+        "r2": -0.24359447408972068,
+        "n": 4992
+      },
+      "Ridge regression": {
+        "mae": 24.602353186322162,
+        "rmse": 31.71843646750515,
+        "r2": 0.017296243771193875,
+        "n": 4992
+      },
+      "Random forest": {
+        "mae": 24.66391185350338,
+        "rmse": 31.96594426159153,
+        "r2": 0.0018997835718341793,
+        "n": 4992
+      },
+      "XGBoost": {
+        "mae": 24.654621028365234,
+        "rmse": 32.03020004256195,
+        "r2": -0.0021168765957355618,
+        "n": 4992
+      }
+    }
+  },
+  "selection": {
+    "rule": "Lowest validation MAE among all candidates (baselines included); RMSE leader reported separately. Test set never used for selection.",
+    "best_by_validation_mae": "Median baseline (train median)",
+    "best_by_validation_rmse": "Ridge regression",
+    "selected_model": "Median baseline (train median)",
+    "selected_model_test": {
+      "mae": 24.057892628205128,
+      "rmse": 32.62662401400552,
+      "r2": -0.039784527133198244,
+      "n": 4992
+    },
+    "best_by_test_mae_for_reference_only": "Median baseline (train median)",
+    "best_by_test_rmse_for_reference_only": "Ridge regression"
+  },
+  "test_paired_bootstrap": {
+    "xgboost_minus_median_baseline": {
+      "estimate": 0.5967284001601048,
+      "ci95": [
+        0.4334840467104123,
+        0.772833617209842
+      ],
+      "resampling_unit": "match",
+      "reps": 2000,
+      "seed": 42
+    }
+  },
+  "prediction_columns": {
+    "Median baseline (train median)": "pred_median_baseline",
+    "Last-match baseline": "pred_last_match",
+    "3-match rolling-average baseline": "pred_rolling3",
+    "Ridge regression": "pred_ridge",
+    "Random forest": "pred_random_forest",
+    "XGBoost": "pred_xgboost"
+  },
+  "plots": {
+    "actual_vs_predicted": "phase6_actual_vs_predicted_rebuilt.png",
+    "residuals": "phase6_residuals_rebuilt.png",
+    "feature_importance": "phase6_feature_importance_rebuilt.png"
+  },
+  "legacy_reconciliation_on_recovered_phase5": {
+    "val:Median baseline (train median)": {
+      "mae": 23.30316879951249,
+      "rmse": 30.40079118730527,
+      "r2": -0.0253588888001135,
+      "n": 3282
+    },
+    "val:Last-match baseline": {
+      "mae": 30.64503351614869,
+      "rmse": 40.48735329661925,
+      "r2": -0.8186323106305391,
+      "n": 3282
+    },
+    "val:3-match rolling-average baseline": {
+      "mae": 26.176315254925854,
+      "rmse": 33.23500223284621,
+      "r2": -0.22545552023913906,
+      "n": 3282
+    },
+    "test:Median baseline (train median)": {
+      "mae": 23.014635124298316,
+      "rmse": 29.995485492985505,
+      "r2": -0.02826298208235478,
+      "n": 4988
+    },
+    "test:Last-match baseline": {
+      "mae": 30.987971130713714,
+      "rmse": 40.611257776874226,
+      "r2": -0.8848868763496851,
+      "n": 4988
+    },
+    "test:3-match rolling-average baseline": {
+      "mae": 25.880914194065756,
+      "rmse": 32.99030595357988,
+      "r2": -0.24384165417869164,
+      "n": 4988
+    },
+    "rows": {
+      "train": 18433,
+      "val": 3282,
+      "test": 4988
+    },
+    "matches": {
+      "train": 876,
+      "val": 148,
+      "test": 219
+    },
+    "train_medians": {
+      "prev_pts": 29.0,
+      "avg_pts_prev3": 31.67,
+      "avg_pts_prev5": 32.4,
+      "std_pts_prev3": 17.17,
+      "trend_pts_prev3": 0.2,
+      "matches_before": 28.0
+    }
+  }
+}

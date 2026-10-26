@@ -1,0 +1,91 @@
+{
+  "label": "REBUILT \u2014 retrained with documented settings; NOT an exact reproduction of the original Phase 6 run",
+  "features_file": "IPL_DecisionLab_Phase5_Features_v1.1_rebuilt.csv",
+  "features_sha256": "7a3c0f1940265ff2490ddcf996e044004db397e53a67015457f33aa50f110cca",
+  "scoring_version": "v1 rules (no fielding) + v1.1 identity fixes",
+  "target": "pts",
+  "predictors": [
+    "prev_pts",
+    "avg_pts_prev3",
+    "avg_pts_prev5",
+    "std_pts_prev3",
+    "trend_pts_prev3",
+    "matches_before"
+  ],
+  "splits": {
+    "train": {
+      "from": "2008-01-01",
+      "to": "2021-12-31",
+      "rows": 18479,
+      "matches": 876,
+      "first_date": "2008-04-18",
+      "last_date": "2021-10-15"
+    },
+    "val": {
+      "from": "2022-01-01",
+      "to": "2023-12-31",
+      "rows": 3288,
+      "matches": 148,
+      "first_date": "2022-03-26",
+      "last_date": "2023-05-29"
+    },
+    "test": {
+      "from": "2024-01-01",
+      "to": "2026-12-31",
+      "rows": 4992,
+      "matches": 219,
+      "first_date": "2024-03-22",
+      "last_date": "2026-05-31"
+    }
+  },
+  "imputation": {
+    "method": "training-split median per predictor",
+    "medians": {
+      "prev_pts": 27.5,
+      "avg_pts_prev3": 29.83333333333333,
+      "avg_pts_prev5": 31.2,
+      "std_pts_prev3": 18.37268503936089,
+      "trend_pts_prev3": 0.2000000000000028,
+      "matches_before": 28.0
+    }
+  },
+  "median_baseline_value": 27.5,
+  "hyperparameters": {
+    "ridge": {
+      "alpha": 1.0
+    },
+    "random_forest": {
+      "n_estimators": 300,
+      "min_samples_leaf": 20,
+      "random_state": 42,
+      "n_jobs": 1
+    },
+    "xgboost": {
+      "n_estimators": 300,
+      "learning_rate": 0.05,
+      "max_depth": 4,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "min_child_weight": 1,
+      "tree_method": "hist",
+      "objective": "reg:squarederror",
+      "random_state": 42,
+      "n_jobs": 1
+    }
+  },
+  "tuning": "none (fixed settings)",
+  "seed": 42,
+  "selection_rule": "Lowest validation MAE among all candidates (baselines included); RMSE leader reported separately. Test set never used for selection.",
+  "library_versions": {
+    "python": "3.13.17",
+    "pandas": "3.0.5",
+    "numpy": "2.5.3",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.4.1"
+  },
+  "artifacts": {
+    "random_forest_rebuilt.joblib": "0b572bf67572cd94d58f1e59c201b4a0326d37952c0aaf2b68bd03b641ef325d",
+    "ridge_rebuilt.joblib": "bac9e71978765e1ece574187c300981562e78c86b2c994daad504c9e1e73eb5a",
+    "xgboost_rebuilt.json": "9b2d845bd60f6fe06ed18ef91390d5a2b12f9daba1feaac5faec6f052e34d3f5"
+  }
+}

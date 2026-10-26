@@ -1,0 +1,8 @@
+registry_id,name,deliveries_named,merged_in_pipeline,merged_in_v1_1,verdict
+21d4e29b,NA Saini,686,False,False,CONFIRMED same person (shared registry id)
+21d4e29b,Navdeep Saini,99,False,True,CONFIRMED same person (shared registry id)
+12314277,Arshad Khan,603,False,False,CONFIRMED same person (shared registry id)
+12314277,Arshad Khan (2),19,True,True,CONFIRMED same person (shared registry id)
+d7423da1,S Arora,152,False,False,CONFIRMED same person (shared registry id)
+d7423da1,Salil Arora,54,False,True,CONFIRMED same person (shared registry id)
+0bf15e52,Harmeet Singh (2),25,False,False,CONFIRMED different person from 'Harmeet Singh' (registry ids ['0bf15e52'] vs ['2a72fd4f'])

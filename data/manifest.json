@@ -1,0 +1,161 @@
+{
+  "built_utc": "2026-10-26T04:43:01+00:00",
+  "recovery_workspace": "Stage B recovery (steps 1\u20136, 21/21 tests passed)",
+  "scoring_version": "v1 rules, v1.1 identity",
+  "season_map": {
+    "2007/08": 2008,
+    "2009": 2009,
+    "2009/10": 2010,
+    "2011": 2011,
+    "2012": 2012,
+    "2013": 2013,
+    "2014": 2014,
+    "2015": 2015,
+    "2016": 2016,
+    "2017": 2017,
+    "2018": 2018,
+    "2019": 2019,
+    "2020/21": 2020,
+    "2021": 2021,
+    "2022": 2022,
+    "2023": 2023,
+    "2024": 2024,
+    "2025": 2025,
+    "2026": 2026
+  },
+  "aliases": {
+    "Arshad Khan (2)": "Arshad Khan",
+    "Navdeep Saini": "NA Saini",
+    "Salil Arora": "S Arora"
+  },
+  "team_map": {
+    "Royal Challengers Bangalore": "Royal Challengers Bengaluru",
+    "Kings XI Punjab": "Punjab Kings",
+    "Delhi Daredevils": "Delhi Capitals",
+    "Rising Pune Supergiant": "Rising Pune Supergiants"
+  },
+  "venue_map": {
+    "Arun Jaitley Stadium, Delhi": "Arun Jaitley Stadium",
+    "Barsapara Cricket Stadium, Guwahati": "Barsapara Cricket Stadium",
+    "Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium, Lucknow": "Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium",
+    "Brabourne Stadium, Mumbai": "Brabourne Stadium",
+    "Dr DY Patil Sports Academy, Mumbai": "Dr DY Patil Sports Academy",
+    "Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam": "Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium",
+    "Eden Gardens, Kolkata": "Eden Gardens",
+    "Feroz Shah Kotla": "Arun Jaitley Stadium",
+    "Himachal Pradesh Cricket Association Stadium, Dharamsala": "Himachal Pradesh Cricket Association Stadium",
+    "M Chinnaswamy Stadium, Bengaluru": "M Chinnaswamy Stadium",
+    "M.Chinnaswamy Stadium": "M Chinnaswamy Stadium",
+    "MA Chidambaram Stadium, Chepauk": "MA Chidambaram Stadium",
+    "MA Chidambaram Stadium, Chepauk, Chennai": "MA Chidambaram Stadium",
+    "Maharaja Yadavindra Singh International Cricket Stadium, Mullanpur": "Maharaja Yadavindra Singh International Cricket Stadium",
+    "Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh": "Maharaja Yadavindra Singh International Cricket Stadium",
+    "Maharashtra Cricket Association Stadium, Pune": "Maharashtra Cricket Association Stadium",
+    "Narendra Modi Stadium, Ahmedabad": "Narendra Modi Stadium",
+    "Punjab Cricket Association IS Bindra Stadium, Mohali": "Punjab Cricket Association IS Bindra Stadium",
+    "Punjab Cricket Association IS Bindra Stadium, Mohali, Chandigarh": "Punjab Cricket Association IS Bindra Stadium",
+    "Punjab Cricket Association Stadium, Mohali": "Punjab Cricket Association IS Bindra Stadium",
+    "Rajiv Gandhi International Stadium, Uppal": "Rajiv Gandhi International Stadium",
+    "Rajiv Gandhi International Stadium, Uppal, Hyderabad": "Rajiv Gandhi International Stadium",
+    "Sardar Patel Stadium, Motera": "Narendra Modi Stadium",
+    "Sawai Mansingh Stadium, Jaipur": "Sawai Mansingh Stadium",
+    "Shaheed Veer Narayan Singh International Stadium, Raipur": "Shaheed Veer Narayan Singh International Stadium",
+    "Vidarbha Cricket Association Stadium, Jamtha": "Vidarbha Cricket Association Stadium",
+    "Wankhede Stadium, Mumbai": "Wankhede Stadium",
+    "Zayed Cricket Stadium, Abu Dhabi": "Zayed Cricket Stadium"
+  },
+  "raw_summary": {
+    "rows": 295732,
+    "columns": 27,
+    "matches": 1243,
+    "first_date": "2008-04-18",
+    "last_date": "2026-05-31",
+    "unique_batters": 739,
+    "unique_bowlers": 578,
+    "cells": 7984764,
+    "missing_cells": 3787556
+  },
+  "cleaned_summary": {
+    "rows": 295557,
+    "columns": 28,
+    "matches": 1243,
+    "seasons": 19,
+    "unique_batters": 736,
+    "unique_bowlers": 576,
+    "total_runs": 401423,
+    "dismissals": 14674,
+    "bowler_wickets": 13460,
+    "core_columns_complete_pct": 100.0
+  },
+  "scoring_discrepancy_summary": {
+    "replay_of_reconstruction_rules_reproduces_pm_reconstructed_exactly": true,
+    "rows_differing_total": 19136,
+    "rows_differing_without_any_attributed_cause": 0,
+    "rows_with_identical_pts_but_flagged": 37,
+    "rows_by_cause_overlapping": {
+      "dot_rate_1_vs_0.5": 14293,
+      "milestone_bonus_dropped": 4755,
+      "duck_penalty_dropped": 1436,
+      "super_over_deliveries_included": 85,
+      "alias_not_merged": 1,
+      "non_striker_only_player_dropped": 56,
+      "only_in_reconstruction": 0
+    }
+  },
+  "old_phase6_report": {
+    "xgb_test": [
+      {
+        "model_heuristic": "Overall Training Median Heuristic",
+        "test_mae": 23.0146,
+        "test_rmse": 29.9955,
+        "test_r2": -0.0283
+      },
+      {
+        "model_heuristic": "XGBoost (Champion Model)",
+        "test_mae": 23.1815,
+        "test_rmse": 29.5706,
+        "test_r2": 0.0007
+      }
+    ],
+    "xgb_gains": {
+      "avg_pts_prev5": 0.4529,
+      "matches_before": 0.1251,
+      "avg_pts_prev3": 0.1179,
+      "std_pts_prev3": 0.106,
+      "trend_pts_prev3": 0.1015,
+      "prev_pts": 0.0966
+    }
+  },
+  "files": {
+    "audit_checks.parquet": "2e50cbe636c70383e94c9028bf1dfa291f06e1742cf5edad837c50766ef21772",
+    "audit_comparison.parquet": "5692b5dcc69f4271164b513d0ac8c1df5d4be7dd6f404c8796abe20b4aa7b8d2",
+    "audit_inventory.csv": "6e2e4ca82242735426afaaad18f4d4491858877749cdfb9ba518653edb7021a2",
+    "audit_missing.parquet": "27c4028df3258ea4666baa90573ef309cc77a881b4e05eb22c792df30de85022",
+    "audit_over_anomalies.csv": "08aaf3c1d0d9ef93623edcf43083660c7bc70b77c56e09072448821fcba11421",
+    "audit_player_identity.csv": "4fafa0d3f3d046af402c51254cb18942be65ce28a77222bd310562d1651fac88",
+    "audit_repeated_keys.csv": "7c6240bafe6fa35958fb6cbd28a5cf120d18e14f71ae16714accfd5cdf929fb6",
+    "audit_schema.parquet": "a887ed263d305571fc475106d2640186ccfcb657f67e53d1e7d7d7f0580f6eba",
+    "audit_super_overs.csv": "5f800b2c01a7498f764426eb6d0d86325adddeca331a49cdf75556fddf41c944",
+    "audit_team_names.csv": "22065be1cbe0c18eb658fab60283d53ddf16c9a728ffb0476fd6100590b2fc08",
+    "audit_venue_names.csv": "4fc11426b77bf26f70f2d5c7d2468adce5c6b45eb9080a765b2044cfb189123f",
+    "dismissal_season.parquet": "b88550d5e3d0a0b07ed3ffebf5d62e8a2a4bd55fd8ed016178b1522571bb13b8",
+    "innings.parquet": "48e58fcc14ff0d3e2d53aa4a5fe7fcfd847804897b4771518c2be50dc77c957a",
+    "over_season.parquet": "aaccbb6a80b0aacf0dc44c5afff408d112f38991637026ffa269e543a14d87a3",
+    "phase6_feature_importance_rebuilt.csv": "9e5d14d835941a7228be0accda4facbded5763459ce21af00db13f2b0b39166c",
+    "phase6_metrics_rebuilt.json": "cb4eb8ecead958a1be973f4975e7ed50582953241404e14084289382c403f7d3",
+    "phase6_predictions_test_rebuilt.csv": "59ce87d907713e34c0df11111c8d06aeb397e65a68e382bdccb2071277ad9328",
+    "phase6_predictions_val_rebuilt.csv": "e353152a7a403a06ac934541097ab158d5ae46d80d8c72690fecbfcfd2de5d90",
+    "player_images.csv": "e5bb4ad1a0711df574920f442ca03d2bfc2caf57d9c362a1319f32d297410eb2",
+    "player_match.parquet": "c935cf3521895c7687b7912678a5150a65ee5103dbd8ee89ee654f70993932b9",
+    "player_team_seasons.parquet": "64acc63ac2d19203b3ad520c8d4c0c04091790fa51f0235883101e97ef3d1f70",
+    "players.parquet": "9fe15a6fe60c2d96c42878a8899cc533bcb2cd260abfd3ed19868496118718ac",
+    "runs_per_ball_season.parquet": "af0d1f592dbbea4bce9d40dfc4a35773c0ce41c2a9473fbaa93660311e3a1f43",
+    "scoring_discrepancies_rebuilt.csv": "5d58a43b2c6fc76ed0ca7ca8cb6e23ced7c66bfaa2adfa7db82d1372836c1be0",
+    "season_summary.parquet": "b115ad514eacd0f4ad055d8b4799cdac81d483e6216c041ea7f7346322577e34",
+    "team_season.parquet": "bcc64cf99247dd7c050729d78690b0bb267761c46a6a6984bcc7f13327187e5a",
+    "venue_summary.parquet": "c119679a0ee472575fb7c0b1a476e377c1ef3e91197a2c7902a9339d825e134a",
+    "preprocess_config_rebuilt.json": "1257f924433045cb3aac6cce97a346ddbe7f6c967a6a31f885c0a661eca0265b",
+    "ridge_rebuilt.joblib": "bac9e71978765e1ece574187c300981562e78c86b2c994daad504c9e1e73eb5a",
+    "xgboost_rebuilt.json": "9b2d845bd60f6fe06ed18ef91390d5a2b12f9daba1feaac5faec6f052e34d3f5"
+  }
+}

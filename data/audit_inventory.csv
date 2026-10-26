@@ -1,0 +1,27 @@
+file,size_mb,role
+IPL_DecisionLab_Phase5_Final_Features.csv,3.599,Built on reconstruction — superseded
+IPL_DecisionLab_features_reconstructed.csv,3.599,Duplicate of Phase 5 file — superseded
+IPL_DecisionLab_pm_reconstructed.csv,2.131,Reconstruction — superseded (wrong scoring rules)
+R1uJUrOYvBOtw2mK.ipynb,0.422,Not part of IPL DecisionLab
+IPL_DecisionLab_Phase2_Cleaned (1).csv,43.413,Duplicate copy
+ipl_balls_raw.zip,1.992,Not part of IPL DecisionLab
+R1uJUrOYvBOtw2mK (1).ipynb,0.422,Duplicate copy
+final_squads (1).csv,0.001,Duplicate copy
+hxqmRKZSP3Fe3HWc.csv,1.5,Not part of IPL DecisionLab
+ipl_male_csv2 (1).zip,6.518,Raw Cricsheet data (source of truth)
+ipl_matches.csv,0.193,Not part of IPL DecisionLab
+IPL_DecisionLab_Phase6_Audit_Report.json,0.004,Old Phase 6 report — partly reproduced
+hxqmRKZSP3Fe3HWc (1).csv,1.5,Duplicate copy
+IPL_DecisionLab_Phase2_Cleaned.csv,43.413,Phase 2 original — verified (rebuilt byte-identical)
+IPL_DecisionLab_Team_Standardized (1).csv,53.852,Duplicate copy
+final_squads.csv,0.001,Not part of IPL DecisionLab
+IPL_DecisionLab_Phase6_Final_Consistency_Audit.txt,0.004,Old Phase 6 report — partly reproduced
+IPL_DecisionLab_Phase3_PlayerMatch_Points.csv,2.003,Phase 3 original — verified (rebuilt byte-identical)
+IPL_DecisionLab_Team_Standardized.csv,53.852,Phase 4 original — verified (rebuilt byte-identical)
+README.md,0.001,Not part of IPL DecisionLab
+IPL_DecisionLab_Player_Mapping_Audit.csv,0.0,Old mapping audit (1 row) — superseded by registry audit
+IPL_DecisionLab_Phase6_Actual_vs_Predicted.png,,MISSING from recovered archive
+IPL_DecisionLab_Phase6_Residuals.png,,MISSING from recovered archive
+IPL_DecisionLab_Phase6_Feature_Importances.png,,MISSING from recovered archive
+original XGBoost model file,,MISSING from recovered archive
+original Phase 3–6 notebook code,,MISSING from recovered archive

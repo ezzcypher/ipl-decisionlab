@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.DS_Store
+# raw and large intermediate data never go in the public repo
+raw/
+*.zip
+recovery/
+*.csv.gz
+.streamlit/secrets.toml
