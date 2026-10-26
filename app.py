@@ -1,13 +1,13 @@
 """IPL DecisionLab — Phase 7 dashboard entry point.  Run: streamlit run app.py"""
 import streamlit as st
-from core import theme, theme_switch
+from core import theme
 
 st.set_page_config(page_title="IPL DecisionLab", page_icon="🏏", layout="wide", initial_sidebar_state="auto")
 
 if "theme" not in st.session_state:
     st.session_state.theme = "dark"
 mode = st.session_state.theme
-theme_switch.install()  # native widgets follow this session's theme (see core/theme_switch.py)
+st.session_state["_tbl_counter"] = 0  # per-run table numbering (components.ui.table)
 st.markdown(theme.css(mode), unsafe_allow_html=True)
 
 st.logo("assets/logo.svg", icon_image="assets/icon.svg", size="large")
@@ -27,6 +27,7 @@ nav = st.navigation({
                 st.Page(P + "06_roles.py", title="Batting · bowling · all-round", icon=":material/sports_cricket:"),
                 st.Page(P + "07_scoring.py", title="Fantasy points calculator", icon=":material/calculate:")],
     "Models & decisions": [st.Page(P + "08_predictions.py", title="Predictive analytics", icon=":material/insights:"),
+                           st.Page(P + "12_leaderboard.py", title="Model leaderboard", icon=":material/leaderboard:"),
                            st.Page(P + "09_selection.py", title="Selection & auction support", icon=":material/how_to_reg:"),
                            st.Page(P + "10_teams.py", title="Teams & seasons", icon=":material/groups:")],
     "Report": [st.Page(P + "11_methodology.py", title="Methodology & final report", icon=":material/menu_book:")],

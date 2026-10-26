@@ -59,6 +59,51 @@ span[data-baseweb="tag"] span {{ color: var(--text) !important; }}
 code {{ color: var(--accent); background: var(--surface2); }}
 hr {{ border-color: var(--border); }}
 
+/* native widgets — styled from tokens so they follow the in-app toggle (public CSS hooks only) */
+[data-testid="stWidgetLabel"] p, [data-testid="stWidgetLabel"] label, .stCheckbox label p, .stToggle label p, .stRadio label p {{ color: var(--text) !important; }}
+[data-testid="stSidebarNavLink"] span, [data-testid="stNavSectionHeader"] span, [data-testid="stNavSectionHeader"] {{ color: var(--text2) !important; }}
+[data-testid="stSidebarNavLink"][aria-current="page"], [data-testid="stSidebarNavLink"]:hover {{ background: var(--surface2) !important; }}
+[data-testid="stSidebarNavLink"][aria-current="page"] span {{ color: var(--text) !important; }}
+[data-testid="stAlertContainer"] {{ background: var(--surface) !important; border: 1px solid var(--border); color: var(--text) !important; }}
+[data-testid="stAlertContainer"] p, [data-testid="stAlertContainer"] svg {{ color: var(--text) !important; fill: var(--text2); }}
+div[data-baseweb="tooltip"], div[data-baseweb="tooltip"] > div, [data-testid="stTooltipContent"] {{ background: var(--surface2) !important; color: var(--text) !important; border:1px solid var(--border); }}
+div[data-baseweb="popover"] > div, div[data-baseweb="popover"] ul, div[data-baseweb="popover"] li, div[data-baseweb="menu"],
+ul[role="listbox"], li[role="option"] {{ background: var(--surface) !important; color: var(--text) !important; }}
+li[role="option"]:hover, li[role="option"][aria-selected="true"] {{ background: var(--surface2) !important; }}
+div[data-baseweb="calendar"], div[data-baseweb="calendar"] * {{ background-color: var(--surface) !important; color: var(--text) !important; }}
+div[data-baseweb="calendar"] [aria-selected="true"] {{ background-color: var(--accent) !important; color: #fff !important; }}
+[data-testid="stSliderThumbValue"], [data-testid="stSliderTickBarMin"], [data-testid="stSliderTickBarMax"] {{ color: var(--text2) !important; }}
+[data-testid="stNumberInputContainer"] button, [data-testid="stNumberInput"] button {{ background: var(--surface2) !important; color: var(--text) !important; }}
+[data-testid="stFileUploaderDropzone"] {{ background: var(--surface2) !important; border: 1px dashed var(--border) !important; }}
+[data-testid="stFileUploaderDropzone"] span, [data-testid="stFileUploaderDropzone"] small {{ color: var(--text2) !important; }}
+[data-testid="stExpander"] details summary {{ background: var(--surface) !important; }}
+[data-testid="stExpander"] details summary svg {{ fill: var(--text2); color: var(--text2); }}
+.katex, .katex * {{ color: var(--text) !important; }}
+[data-testid="stCaptionContainer"], [data-testid="stCaptionContainer"] p {{ color: var(--muted) !important; }}
+[data-testid="stHeader"] button, [data-testid="stToolbar"] button, [data-testid="stExpandSidebarButton"], [data-testid="stSidebarCollapseButton"] button {{ color: var(--text2) !important; }}
+[data-testid="stPageLink"] a span, [data-testid="stPageLink-NavLink"] span {{ color: var(--accent) !important; }}
+div[data-baseweb="checkbox"] > div {{ border-color: var(--border); }}
+[data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] li {{ color: var(--text2); }}
+[data-testid="stMarkdownContainer"] strong {{ color: var(--text); }}
+div[role="dialog"], div[data-baseweb="modal"] > div {{ background: var(--surface) !important; color: var(--text) !important; }}
+
+[data-testid="stPlotlyChart"] {{ border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--surface); }}
+section[data-testid="stSidebar"], [data-testid="stSidebarContent"] {{ background: var(--surface) !important; }}
+[data-testid="stSelectbox"] [role="group"], [data-testid="stMultiSelect"] [role="group"], [data-testid="stDateInput"] [role="group"],
+[data-testid="stNumberInputContainer"], [data-testid="stNumberInputField"], [data-testid="stDateInputField"], [data-testid="stTextInputRootElement"],
+.stTextInput input, .stTextArea textarea {{ background: var(--surface2) !important; color: var(--text) !important; border-color: var(--border) !important; }}
+[data-testid="stSelectbox"] input, [data-testid="stMultiSelect"] input {{ color: var(--text) !important; background: transparent !important; }}
+[data-testid="stMultiSelectDropdown"], [data-testid$="Dropdown"], div:has(> [role="listbox"]), [role="listbox"],
+[data-testid="stPopoverBody"], [role="dialog"] {{ background: var(--surface) !important; color: var(--text) !important; border-color: var(--border) !important; }}
+[role="option"] {{ color: var(--text) !important; }}
+[role="option"][data-focused="true"], [role="option"][aria-selected="true"], [role="option"]:hover {{ background: var(--surface2) !important; }}
+[data-testid="stMarkdownContainer"] code, code, pre {{ background: var(--surface2) !important; color: var(--accent) !important; }}
+[data-testid="stDateInputCalendar"], [data-testid="stDateInputCalendar"] * {{ background-color: var(--surface) !important; color: var(--text) !important; }}
+[data-testid="stDateInputCalendar"] [aria-selected="true"], [data-testid="stDateInputCalendar"] [data-selected="true"] {{ background-color: var(--accent) !important; color: #fff !important; }}
+[data-testid="stFileChip"], [data-testid="stFileUploaderFile"] {{ background: var(--surface) !important; color: var(--text) !important; border: 1px solid var(--border); }}
+[data-testid="stFileUploaderDropzone"] button, [data-testid^="stBaseButton"] {{ background: var(--surface2) !important; color: var(--text) !important; border: 1px solid var(--border) !important; }}
+[data-testid^="stBaseButton"]:hover {{ border-color: var(--accent) !important; color: var(--accent) !important; }}
+[data-testid="stFileChip"] > div:first-child {{ background: var(--surface2) !important; color: var(--text) !important; }}
 /* custom components */
 .dl-brand {{ display:flex; align-items:center; gap:10px; margin: 4px 0 14px; }}
 .dl-logo {{ width:34px; height:34px; border-radius:10px; background: linear-gradient(135deg, var(--accent), var(--accent2));
@@ -97,10 +142,13 @@ hr {{ border-color: var(--border); }}
 .dl-hero .stats {{ display:grid; grid-template-columns: repeat(4, minmax(90px, 1fr)); gap: 10px; margin-top: 20px; }}
 .dl-hero .stat {{ background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.18); border-radius: 14px; padding: 10px 12px; }}
 .dl-hero .stat b {{ display:block; font-size: 1.45rem; color:#fff; }} .dl-hero .stat span {{ color: rgba(255,255,255,.75); font-size:.72rem; }}
-.dl-tablewrap {{ overflow-x:auto; border:1px solid var(--border); border-radius:14px; background: var(--surface); margin-bottom: 12px; }}
+.dl-tablewrap {{ overflow:auto; border:1px solid var(--border); border-radius:14px; background: var(--surface); margin-bottom: 12px; }}
 .dl-table {{ width:100%; border-collapse: collapse; font-size: .84rem; }}
-.dl-table th {{ text-align:left; color: var(--muted); font-weight:600; padding: 10px 12px; border-bottom:1px solid var(--border); white-space:nowrap; }}
-.dl-table td {{ color: var(--text); padding: 9px 12px; border-bottom:1px solid var(--border); vertical-align: top; }}
+.dl-table th {{ text-align:left; color: var(--muted); font-weight:600; padding: 10px 12px; border-bottom:1px solid var(--border); white-space:nowrap; position: sticky; top: 0; background: var(--surface); }}
+.dl-table.wrap td {{ white-space: normal; max-width: none; }}
+.dl-table td.num {{ text-align:right; font-variant-numeric: tabular-nums; white-space:nowrap; }}
+.dl-table tbody tr:hover td {{ background: var(--surface2); }}
+.dl-table td {{ color: var(--text); padding: 9px 12px; border-bottom:1px solid var(--border); vertical-align: top; white-space: nowrap; max-width: 340px; overflow: hidden; text-overflow: ellipsis; }}
 .dl-table tr:last-child td {{ border-bottom: none; }}
 @media (max-width: 760px) {{ .dl-kpi {{ margin-bottom: 10px; }} .dl-hero .stats {{ grid-template-columns: repeat(2, 1fr); }} .dl-kpi .value {{ font-size: 1.4rem; }} }}
 </style>
@@ -113,7 +161,7 @@ def plotly_template(mode):
     tpl.layout = go.Layout(
         font=dict(family=PLOT_FONT, color=t["text2"], size=12),
         title=dict(font=dict(color=t["text"], size=14), x=0, xanchor="left"),
-        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", colorway=t["series"],
+        paper_bgcolor=t["surface"], plot_bgcolor=t["surface"],  # explicit: never inherit the native theme colorway=t["series"],
         xaxis=dict(gridcolor=t["grid"], linecolor=t["border"], zerolinecolor=t["border"], tickfont=dict(color=t["text2"]),
                    title=dict(font=dict(color=t["text2"]))),
         yaxis=dict(gridcolor=t["grid"], linecolor=t["border"], zerolinecolor=t["border"], tickfont=dict(color=t["text2"]),

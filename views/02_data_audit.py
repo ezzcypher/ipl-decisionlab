@@ -46,10 +46,10 @@ def main():
         sch = D.table("audit_schema.parquet")
         raw_cols = sch[sch.raw_dtype.notna()][["column", "raw_dtype"]]
         st.markdown(f"**{len(raw_cols)} raw columns.** Numeric extras (`wides`, `noballs`, …) are floats because they are blank when not applicable.")
-        st.dataframe(raw_cols, hide_index=True, width="stretch", height=300)
+        ui.table(raw_cols, hide_index=True, width="stretch", height=300)
         inv = D.table("audit_inventory.csv")
         st.markdown("**Recovered archive inventory**")
-        st.dataframe(inv, hide_index=True, width="stretch")
+        ui.table(inv, hide_index=True, width="stretch")
         ui.download(inv, "part1_file_inventory", key="dl_inv")
     with tabs[1]:
         m = D.table("audit_missing.parquet")
@@ -73,7 +73,7 @@ def main():
                     dict(label="Unresolved", value=str(int((rk.status == "UNRESOLVED").sum())), sub="keys without an explanation")])
         ui.chart(px.histogram(rk.drop_duplicates(["match_id", "innings", "ball"]), x="deliveries_in_over", title="Deliveries in the affected overs",
                               labels={"deliveries_in_over": "Deliveries in over (incl. wides/no-balls)", "count": "Overs"}), height=280)
-        st.dataframe(rk.drop(columns=["status"]), hide_index=True, width="stretch", height=360)
+        ui.table(rk.drop(columns=["status"]), hide_index=True, width="stretch", height=360)
         ui.download(rk, "part1_repeated_delivery_keys", key="dl_rk")
     with tabs[3]:
         an = D.table("audit_over_anomalies.csv")
@@ -81,18 +81,18 @@ def main():
                 "(legal balls already bowled + 1)/10, so a wide and the re-bowled ball share a label. Sorting by (over, n read as text) reproduces "
                 "the source file order in every innings. The corrected order lives in a separate derived dataset; original identifiers are untouched.")
         st.markdown("**Overs the source records with an unusual legal-ball count** (unresolved; kept as recorded)")
-        st.dataframe(an, hide_index=True, width="stretch")
+        ui.table(an, hide_index=True, width="stretch")
         ui.download(an, "part1_over_anomalies", key="dl_an")
     with tabs[4]:
         tn = D.table("audit_team_names.csv")
         st.markdown("**Franchise names in the raw file** — 4 renames are mapped to the current name; originals are preserved.")
-        st.dataframe(tn, hide_index=True, width="stretch")
+        ui.table(tn, hide_index=True, width="stretch")
         idt = D.table("audit_player_identity.csv")
         st.markdown("**Player identity audit** — Cricsheet registry ids decide whether two names are one person.")
-        st.dataframe(idt, hide_index=True, width="stretch")
+        ui.table(idt, hide_index=True, width="stretch")
         vn = D.table("audit_venue_names.csv")
         st.markdown("**Venue names** — mapping recovered from the original Phase 2 output (precomputed, not independently derived).")
-        st.dataframe(vn.sort_values(["standardized", "venue"]), hide_index=True, width="stretch", height=320)
+        ui.table(vn.sort_values(["standardized", "venue"]), hide_index=True, width="stretch", height=320)
         c1, c2, c3 = st.columns(3)
         with c1: ui.download(tn, "part1_team_names", key="dl_tn")
         with c2: ui.download(idt, "part1_player_identity", key="dl_id")
@@ -102,11 +102,11 @@ def main():
         ui.note("<b>Earlier Phase 6 claims.</b> The recovered report was built on a reconstructed scoring table that used the wrong rules "
                 "(dot ball = 1 point, no milestone bonuses or duck penalty, super-over balls included). Its baseline numbers reproduce exactly; "
                 "its XGBoost numbers cannot be reproduced because the model and code were lost.")
-        st.dataframe(pd.DataFrame(old["xgb_test"]), hide_index=True, width="stretch")
+        ui.table(pd.DataFrame(old["xgb_test"]), hide_index=True, width="stretch")
         disc = man["scoring_discrepancy_summary"]
         st.markdown(f"**Reconstruction vs original scoring:** {disc['rows_differing_total']:,} player-match rows differ; "
                     f"{disc['rows_differing_without_any_attributed_cause']} unexplained.")
-        st.dataframe(pd.DataFrame([{"cause": k, "rows": v} for k, v in disc["rows_by_cause_overlapping"].items()]), hide_index=True)
+        ui.table(pd.DataFrame([{"cause": k, "rows": v} for k, v in disc["rows_by_cause_overlapping"].items()]), hide_index=True)
 
 
 ui.guard(main)

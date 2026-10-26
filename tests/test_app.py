@@ -158,11 +158,46 @@ def test_scoring_reproduces_every_stored_score():
 
 # 9 classification --------------------------------------------------------------------------------
 def test_role_rule_is_participation_based():
-    from core.data import classify
-    s = pd.DataFrame({"balls_faced_pm": [20, 1, 12, 2, 20], "balls_bowled_pm": [0, 22, 15, 1, 0], "matches": [50, 50, 50, 50, 3]})
-    assert classify(s).tolist() == ["Batter", "Bowler", "All-rounder", "Limited role", "Insufficient sample"]
-    s2 = s.assign(avg_pts=[1, 1000, 5, 999, 7])  # fantasy points never change the role
-    assert classify(s2).tolist() == classify(s).tolist()
+    from core import roles as R
+    ev = pd.DataFrame({"player": list("ABCDE"), "matches": [50, 50, 50, 50, 3], "bat_share": [1, .1, .9, .1, 1], "bowl_share": [0, 1, .9, .1, 0],
+                       "balls_faced_pm": [20, 1, 12, 2, 20], "balls_bowled_pm": [0, 22, 15, 1, 0]})
+    role, reason = R.classify(ev)
+    assert role.tolist() == ["Batter", "Bowler", "All-rounder", "Unknown", "Unknown"]
+    assert reason.iloc[4].startswith("fewer than") and "neither" in reason.iloc[3]
+    assert R.classify(ev.assign(avg_pts=[1, 1000, 5, 999, 7]))[0].tolist() == role.tolist()  # fantasy points never change the role
+    # thresholds matter: demand more balls bowled and the all-rounder becomes a batter
+    assert R.classify(ev, bowl_bpm=16)[0].tolist()[2] == "Batter"
+    # share threshold: bowling in only 10% of matches is not "regular" even with many balls
+    assert R.classify(ev.assign(balls_bowled_pm=[0, 22, 15, 30, 0]))[0].tolist()[3] == "Unknown"
+    assert set(R.ROLES) == {"Batter", "Bowler", "All-rounder", "Unknown"}
+
+
+def test_roles_on_real_data_and_sensitivity():
+    from core import roles as R
+    ev = R.evidence(pm())
+    role, _ = R.classify(ev, **R.DEFAULTS)
+    assert set(role) <= set(R.ROLES) and (role[ev.matches < R.DEFAULTS["min_matches"]] == "Unknown").all()
+    assert (ev.matches_batted <= ev.matches).all() and (ev.matches_bowled <= ev.matches).all()
+    sens = R.sensitivity(ev, R.DEFAULTS, "bowl_bpm", [0, 6, 12, 24])
+    tot = sens.groupby("threshold").players.sum()
+    assert (tot == len(ev)).all(), "every player gets exactly one role at every threshold"
+    bowlers = sens[sens.role == "Bowler"].set_index("threshold").players
+    assert bowlers.is_monotonic_decreasing, "a stricter bowling threshold cannot create bowlers"
+    k = ev.set_index("player")
+    assert role[ev.player == "JJ Bumrah"].iloc[0] == "Bowler" and role[ev.player == "V Kohli"].iloc[0] == "Batter"
+
+
+def test_role_filters_apply_on_pages():
+    at = app(page="05_player_explorer.py", state={"f_roles": ["Bowler"]})
+    assert not at.exception
+    name = at.selectbox(key="f_player").value
+    from core import roles as R
+    ev = R.evidence(pm()); ev["role"], _ = R.classify(ev, **R.DEFAULTS)
+    assert ev.set_index("player").loc[name, "role"] == "Bowler", name
+    assert any("statistical role" in m.value for m in at.markdown)
+    for page in ("06_roles.py", "09_selection.py", "10_teams.py"):
+        at = app(page=page, state={"f_roles": ["All-rounder"]})
+        assert not at.exception and not at.error, page
 
 
 # 10-12 models, retrospective predictions, split separation ---------------------------------------
@@ -226,7 +261,7 @@ def test_missing_data_shows_message_not_traceback(tmp=Path("/tmp/claude-0/ipl_dl
 
 
 def test_empty_filter_state_is_handled():
-    at = app(page="09_selection.py", state={"f_min_matches": 200, "f_seasons": (2008, 2008)})
+    at = app(page="09_selection.py", state={"f_role_min": 100, "f_seasons": (2008, 2008)})
     assert not at.exception and any("No players meet" in i.value for i in at.info)
     at = app(page="05_player_explorer.py", state={"f_seasons": (2008, 2008), "f_player": "Shubman Gill"})
     assert not at.exception and any("no matches" in i.value for i in at.info)

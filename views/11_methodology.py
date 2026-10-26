@@ -29,6 +29,10 @@ def report_md(F):
     rr = lambda q: 6 * q.runs.sum() / q.legal_balls.sum()
     early, late = rr(se[se.season_year <= 2021]), rr(se[se.season_year >= 2022])
     rk = D.table("audit_repeated_keys.csv")
+    try:
+        ex = D.jsonfile("model_experiments.json")
+    except D.MissingData:
+        ex = None
     top_avg = F["s30"].nlargest(5, "avg_pts")[["player", "avg_pts"]]
     steady = F["s30"][F["s30"].avg_pts >= 30].nsmallest(5, "cv")[["player", "cv"]]
     L = ["# IPL DecisionLab — final report", "",
@@ -45,16 +49,20 @@ def report_md(F):
          "", "## Part 3 · Fantasy scoring",
          f"- Version {scoring.VERSION}. Batting: runs + fours + 2×sixes + 4/8/16 stacking milestones − 2 duck. Bowling: 25 per credited wicket. Dot balls: 0.5.",
          f"- The formula reproduces all {len(F['pm']):,} stored player-match scores (live check on the scoring page).",
-         "- Roles use a participation rule (balls faced and legal balls bowled per match), never fantasy points.",
+         "- Roles (Batter / Bowler / All-rounder / Unknown) use a configurable participation heuristic — share of matches batted/bowled and balls per match — never fantasy points; no official roles exist in the data.",
          "", "## Part 4 · Predictive modelling (rebuilt)",
          f"- Features: {', '.join(F['cfg']['predictors'])}; earlier matches only; training-median imputation.",
          f"- Split: train {F['cfg']['splits']['train']['first_date']}–{F['cfg']['splits']['train']['last_date']}, validation 2022–2023, test 2024–2026.",
          f"- Best by validation MAE: {sel['best_by_validation_mae']} ({val[sel['best_by_validation_mae']]['mae']:.2f}). Best by validation RMSE: {sel['best_by_validation_rmse']} ({val[sel['best_by_validation_rmse']]['rmse']:.2f}).",
          f"- Selected model on test: MAE {test[sel['selected_model']]['mae']:.2f}, RMSE {test[sel['selected_model']]['rmse']:.2f}, R² {test[sel['selected_model']]['r2']:.3f}.",
          f"- XGBoost minus median baseline, test MAE: {boot['estimate']:+.2f} (95% CI {boot['ci95'][0]:+.2f} to {boot['ci95'][1]:+.2f}).",
+         *([f"- Offline experiments (train → validation selection, one test evaluation): {ex['selected']} — test MAE "
+            f"{ex['test_after_selection']['selected']['mae']:.2f} vs median {ex['test_after_selection']['median_baseline']['mae']:.2f}, "
+            f"RMSE {ex['test_after_selection']['selected']['rmse']:.2f} vs {ex['test_after_selection']['median_baseline']['rmse']:.2f}."] if ex else []),
          "", "## Part 5 · Selection and auction interpretation",
          "- Rankings are weighted z-scores of average, recent form, consistency and participation; the weights are the user's choice.",
-         "- No auction price data exists in the source; value metrics appear only when the user supplies prices.",
+         "- No auction price data exists in the source. Users can upload real prices (template provided); players match by Cricsheet id or exact name only.",
+         "- Price per point = sold price ÷ fantasy points in the auction season; blank for missing/zero prices or no matches. Past value is not future value.",
          "", "## Part 6 · Conclusions",
          "- Reliable: totals, rates, distributions, player histories and the scoring breakdown.",
          "- Not reliable: match-level point forecasts — recent-form features explain under 2% of variance.",
@@ -83,12 +91,12 @@ def main():
         st.page_link("views/03_eda.py", label="Open the full Part 2 EDA report →")
         st.page_link("views/04_comparison.py", label="Open Part 1 vs Part 2 comparison →")
     with tabs[2]:
-        st.dataframe(pd.DataFrame(scoring.RULES, columns=["component", "rule", "points", "condition"]), hide_index=True, width="stretch")
+        ui.table(pd.DataFrame(scoring.RULES, columns=["component", "rule", "points", "condition"]), hide_index=True, width="stretch")
         st.page_link("views/07_scoring.py", label="Worked examples and calculator →")
     with tabs[3]:
         mt = pd.DataFrame([{"split": s_, "model": k, **{m: v[m] for m in ("mae", "rmse", "r2")}}
                            for s_, sk in (("validation", "val"), ("test", "test")) for k, v in F["mets"]["metrics"][sk].items()])
-        st.dataframe(mt.round(4), hide_index=True, width="stretch")
+        ui.table(mt.round(4), hide_index=True, width="stretch")
         st.page_link("views/08_predictions.py", label="Predictions, errors and feature importance →")
 
     st.markdown("### Downloads")

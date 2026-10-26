@@ -90,14 +90,14 @@ def main():
                  height=max(320, 24 * len(v)))
     with t5:
         st.markdown("**Highest innings totals**")
-        st.dataframe(ui.dates(i.nlargest(10, "runs")[["start_date", "batting_team", "bowling_team", "venue", "innings", "runs", "wickets", "sixes"]]),
+        ui.table(ui.dates(i.nlargest(10, "runs")[["start_date", "batting_team", "bowling_team", "venue", "innings", "runs", "wickets", "sixes"]]),
                      hide_index=True, width="stretch")
         pm = ui.apply(D.player_match(), seasons=seasons, teams=teams)
         st.markdown("**Highest individual fantasy scores**")
-        st.dataframe(ui.dates(pm.nlargest(10, "pts")[["start_date", "player", "team", "opponent", "runs", "wickets", "pts"]]), hide_index=True, width="stretch")
+        ui.table(ui.dates(pm.nlargest(10, "pts")[["start_date", "player", "team", "opponent", "runs", "wickets", "pts"]]), hide_index=True, width="stretch")
         st.markdown("**Cleaning decisions and their consequences**")
         ck = D.table("audit_checks.parquet").set_index("id")
-        st.dataframe(pd.DataFrame([
+        ui.table(pd.DataFrame([
             ("Exclude super overs (innings > 2)", "175 deliveries, 16 matches", "Totals and fantasy points reflect regulation innings only"),
             ("Keep 42 repeated delivery keys", "84 rows", "No real delivery lost; corrected order in a derived dataset"),
             ("Standardize 4 franchise names", f"{ck.loc['M1', 'rows_affected']:,} team cells", "Team trends join across renames; originals kept"),

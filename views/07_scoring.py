@@ -47,7 +47,7 @@ def main():
 
     t1, t2, t3, t4 = st.tabs(["Rules", "Worked example", "Match breakdown", "Calculator"])
     with t1:
-        st.dataframe(pd.DataFrame(scoring.RULES, columns=["component", "rule", "points", "condition"]), hide_index=True, width="stretch")
+        ui.table(pd.DataFrame(scoring.RULES, columns=["component", "rule", "points", "condition"]), hide_index=True, width="stretch")
         ui.note("<b>Plain-language notes.</b><br>• Milestones <b>stack</b>: a century earns 4 + 8 + 16 = 28 bonus points.<br>"
                 "• A <b>duck</b> needs three things: the player faced at least one delivery as striker, scored 0, and is recorded as dismissed — "
                 "in any mode, including run out and retired. A non-striker run out without facing a ball gets no penalty.<br>"
@@ -65,7 +65,7 @@ def main():
             st.markdown(ui.chips([f"{r.runs} runs", f"{r.balls_faced} balls", f"{r.fours} fours", f"{r.sixes} sixes",
                                   "not out" if not r.dismissed else f"out ({r.dismissal})", f"{r.legal_balls} balls bowled"]), unsafe_allow_html=True)
             df, b = breakdown(r)
-            st.dataframe(df, hide_index=True, width="stretch")
+            ui.table(df, hide_index=True, width="stretch")
             st.markdown(f"**Total = {b['batting']:g} batting + {b['bowling']:g} bowling + {b['dot']:g} dots = {b['total']:g} points** "
                         f"(stored value: {r.pts:g} ✓)" if np.isclose(b["total"], r.pts) else f"⚠ mismatch with stored {r.pts}")
     with t3:
@@ -79,7 +79,7 @@ def main():
         df, b = breakdown(r)
         c1, c2 = st.columns([3, 2])
         with c1:
-            st.dataframe(df, hide_index=True, width="stretch")
+            ui.table(df, hide_index=True, width="stretch")
             st.markdown(f"**{b['total']:g} points** · stored {r.pts:g} {'✓' if np.isclose(b['total'], r.pts) else '⚠'}")
             ui.download(df.assign(player=who, match_id=mid), f"score_breakdown_{who.replace(' ', '_')}_{mid}", key="dl_bd")
         with c2:
@@ -100,7 +100,7 @@ def main():
             st.warning("Boundaries add up to more runs than entered — check the inputs.")
         r = pd.Series(dict(runs=runs, fours=fours, sixes=sixes, batted=batted, dismissed=out, wickets=wk, dots=dots, dismissal="dismissed"))
         df, b = breakdown(r)
-        st.dataframe(df, hide_index=True, width="stretch")
+        ui.table(df, hide_index=True, width="stretch")
         st.markdown(f"### {b['total']:g} points")
 
 

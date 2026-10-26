@@ -74,7 +74,16 @@ def chart(fig, height=360, empty="No data for the current filters.", key=None):
         return
     fig.update_layout(template=TEMPLATES[mode()], height=height, legend_title_text="")
     _recolor(fig)
-    fig.update_xaxes(automargin=True); fig.update_yaxes(automargin=True)
+    t = tokens(mode())
+    # explicit layout values (not only template ones) so the host's native theme can never override them
+    fig.update_layout(paper_bgcolor=t["surface"], plot_bgcolor=t["surface"], font_color=t["text2"], title_font_color=t["text"],
+                      legend_font_color=t["text2"], hoverlabel=dict(bgcolor=t["surface2"], bordercolor=t["border"], font_color=t["text"]))
+    ax = dict(automargin=True, gridcolor=t["grid"], linecolor=t["border"], zerolinecolor=t["border"],
+              tickfont_color=t["text2"], title_font_color=t["text2"])
+    fig.update_xaxes(**ax); fig.update_yaxes(**ax)
+    if fig.data and any(getattr(tr, "type", "") == "heatmap" for tr in fig.data):
+        fig.update_traces(colorbar=dict(tickfont=dict(color=t["text2"]), title=dict(font=dict(color=t["text2"]))), selector=dict(type="heatmap"))
+    fig.for_each_annotation(lambda a: a.update(text=a.text.split("=", 1)[-1]))  # facet titles: "metric=MAE" → "MAE"
     st.plotly_chart(fig, width="stretch", theme=None, config={"displaylogo": False, "modeBarButtonsToRemove": ["lasso2d", "select2d"]}, key=key)
 
 
@@ -121,15 +130,66 @@ def avatar_html(player):
     return f'<div class="dl-avatar" aria-label="{esc(player)} (no verified photo)">{esc(initials(player))}</div>'
 
 
-def paged(df, key, page_size=25):
-    """Sortable dataframe with simple pagination for large tables."""
+def _fmt(v, col):
+    if v is None or (isinstance(v, float) and v != v) or v is pd.NaT:
+        return "–"
+    if isinstance(v, (bool,)) or type(v).__name__ == "bool_":
+        return "✓" if v else "–"
+    if isinstance(v, pd.Timestamp):
+        return v.strftime("%Y-%m-%d")
+    plain = any(k in col.lower() for k in ("id", "season", "year", "rank", "innings", "over"))
+    if isinstance(v, (int,)) or type(v).__name__.startswith("int"):
+        return str(v) if plain else f"{v:,}"
+    if isinstance(v, float) or type(v).__name__.startswith("float"):
+        if plain and float(v).is_integer():
+            return str(int(v))
+        if abs(v) < 1:
+            return f"{v:.3f}".rstrip("0").rstrip(".") if v else "0"
+        return f"{v:,.2f}".rstrip("0").rstrip(".") if abs(v) < 1e6 else f"{v:,.0f}"
+    return str(v)
+
+
+def table(data, key=None, page_size=15, height=None, sort=True, **_ignored):
+    """Themed, sortable, paginated HTML table (follows the in-app theme, unlike canvas-based grids)."""
+    df = pd.DataFrame(data)
+    if not isinstance(df.index, pd.RangeIndex):
+        df = df.reset_index(drop=df.index.name is None and not isinstance(df.index, pd.MultiIndex))
     if empty_or(df):
         return
+    n = st.session_state.get("_tbl_counter", 0) + 1
+    st.session_state["_tbl_counter"] = n
+    key = key or f"tbl{n}"
+    if sort and len(df) > 8:
+        c1, c2, c3 = st.columns([3, 2, 5])
+        col = c1.selectbox("Sort by", ["(original order)"] + list(df.columns), key=f"{key}_sort", label_visibility="collapsed")
+        desc = c2.toggle("Descending", True, key=f"{key}_desc")
+        if col != "(original order)":
+            df = df.sort_values(col, ascending=not desc, kind="stable", na_position="last")
+    else:
+        c3 = st.container()
     pages = max(1, -(-len(df) // page_size))
-    c1, c2 = st.columns([1, 5])
-    p = c1.number_input("Page", 1, pages, 1, key=f"{key}_page") if pages > 1 else 1
-    c2.caption(f"{len(df):,} rows · page {p} of {pages} · click a column header to sort")
-    st.dataframe(dates(df.iloc[(p - 1) * page_size: p * page_size]), width="stretch", hide_index=True)
+    p = 1
+    if pages > 1:
+        p = st.session_state.get(f"{key}_page", 1)
+        p = min(max(1, p), pages)
+    view = df.iloc[(p - 1) * page_size: p * page_size]
+    head = "".join(f"<th>{esc(str(c))}</th>" for c in view.columns)
+    num = [pd.api.types.is_numeric_dtype(view[c]) and not pd.api.types.is_bool_dtype(view[c]) for c in view.columns]
+    body = "".join("<tr>" + "".join(f'<td class="{"num" if nm else ""}" title="{esc(_fmt(v, str(c)))}">{esc(_fmt(v, str(c)))}</td>' for v, c, nm in zip(r, view.columns, num)) + "</tr>"
+                   for r in view.itertuples(index=False))
+    style = f' style="max-height:{int(height)}px"' if height else ""
+    st.markdown(f'<div class="dl-tablewrap"{style}><table class="dl-table"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>',
+                unsafe_allow_html=True)
+    if pages > 1:
+        a, b = st.columns([1, 4])
+        a.number_input("Page", 1, pages, key=f"{key}_page", label_visibility="collapsed")
+        b.caption(f"{len(df):,} rows · page {p} of {pages}")
+    else:
+        st.caption(f"{len(df):,} rows")
+
+
+def paged(df, key, page_size=25):
+    table(df, key=key, page_size=page_size)
 
 
 # ---------------------------------------------------------------- filters (shared keys = consistent across pages)
@@ -205,7 +265,7 @@ def status_table(df, cols, status_col="status"):
     body = ""
     for _, r in df.iterrows():
         body += "<tr>" + "".join(f"<td>{badge(r[c]) if c == status_col else esc(str(r[c]))}</td>" for c in cols) + "</tr>"
-    st.markdown(f'<div class="dl-tablewrap"><table class="dl-table"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>',
+    st.markdown(f'<div class="dl-tablewrap"><table class="dl-table wrap"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>',
                 unsafe_allow_html=True)
 
 
@@ -223,7 +283,7 @@ def dates(df):
     return out
 
 
-ROLE_ORDER = ["Batter", "Bowler", "All-rounder", "Limited role", "Insufficient sample"]
+ROLE_ORDER = ["Batter", "Bowler", "All-rounder", "Unknown"]
 
 
 def role_colors():

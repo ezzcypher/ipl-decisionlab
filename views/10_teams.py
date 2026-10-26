@@ -2,6 +2,7 @@ import plotly.express as px
 import streamlit as st
 from components import ui
 from core import data as D
+from core import roles as R
 
 
 def main():
@@ -12,7 +13,9 @@ def main():
     teams = ui.multi("Teams to compare", team.team.unique(), "f_teams")
     focus = st.sidebar.selectbox("Team profile", sorted(team.team.unique()), key="f_team_focus",
                                  index=sorted(team.team.unique()).index("Mumbai Indians"))
-    ui.active_filters(Seasons=f"{seasons[0]}–{seasons[1]}", Compare=teams, Profile=focus)
+    role_f = ui.multi("Role (contributors chart)", R.ROLES, "f_roles")
+    th = R.thresholds()
+    ui.active_filters(Seasons=f"{seasons[0]}–{seasons[1]}", Compare=teams, Profile=focus, Roles=role_f)
 
     t = team[team.season_year.between(*seasons)].assign(run_rate=lambda d: 6 * d.runs_scored / d.balls_faced,
                                                         economy=lambda d: 6 * d.runs_conceded / d.balls_bowled)
@@ -39,11 +42,19 @@ def main():
 
     f = ui.apply(pm, seasons=seasons, teams=[focus])
     contrib = f.groupby("player").agg(points=("pts", "sum"), matches=("match_id", "nunique"), seasons=("season_year", "nunique")).reset_index()
+    ev = R.evidence(f)
+    ev["role"], _ = R.classify(ev, **th)
+    contrib = contrib.merge(ev[["player", "role"]], on="player")
+    contrib = contrib[ui.isin(contrib.role, role_f)]
     top = contrib.nlargest(15, "points").sort_values("points")
     c1, c2 = st.columns(2)
     with c1:
-        ui.chart(px.bar(top, x="points", y="player", orientation="h", hover_data={"matches": True, "seasons": True},
-                        title=f"Top fantasy contributors for {focus}", labels={"points": "Total fantasy points", "player": ""}), height=460)
+        fig = px.bar(top, x="points", y="player", orientation="h", hover_data={"matches": True, "seasons": True}, color="role",
+                     color_discrete_map=ui.role_colors(),
+                     title=f"Top fantasy contributors for {focus} (statistical roles for matches with this team)",
+                     labels={"points": "Total fantasy points", "player": ""})
+        fig.update_yaxes(categoryorder="total ascending")
+        ui.chart(None if top.empty else fig, height=460, empty="No contributors with the selected roles.")
     with c2:
         v = inn[(inn.batting_team == focus) & inn.season_year.between(*seasons)].groupby("venue").agg(
             innings=("match_id", "size"), avg_runs=("runs", "mean")).reset_index()
@@ -68,7 +79,7 @@ def main():
         ui.chart(px.line(cmp, x="season_year", y="economy", color="team", markers=True, title="Bowling economy",
                          labels={"season_year": "Season", "economy": "Runs conceded per over"}))
     st.markdown("### Team-name normalization audit")
-    st.dataframe(t[["season_year", "team", "original_names", "matches", "runs_scored", "wickets_taken", "run_rate", "economy"]].sort_values(
+    ui.table(t[["season_year", "team", "original_names", "matches", "runs_scored", "wickets_taken", "run_rate", "economy"]].sort_values(
         ["team", "season_year"]).round(2), hide_index=True, width="stretch", height=360)
     ui.download(t, "team_season_stats")
 

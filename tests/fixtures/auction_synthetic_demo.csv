@@ -1,0 +1,46 @@
+player,registry_id,season,franchise,base_price,sold_price,auction_status,currency,source
+B Kumar,2e81a32d,2024,Franchise A,200.0,1456.1,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Mohammed Siraj,,2025,Franchise B,150.0,964.5,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+V Kohli,ba607b88,2026,Franchise C,200.0,620.2,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+YBK Jaiswal,,2024,Franchise D,50.0,355.7,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+KH Pandya,5b8c830e,2025,Franchise A,200.0,1349.7,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Abhishek Sharma,,2026,Franchise B,50.0,329.0,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+P Simran Singh,9418198b,2024,Franchise C,50.0,156.1,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Rashid Khan,,2025,Franchise D,100.0,294.9,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Arshdeep Singh,244048f6,2026,Franchise A,150.0,617.3,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+SS Iyer,,2024,Franchise B,100.0,453.2,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+B Sai Sudharsan,d5130a30,2025,Franchise C,150.0,1195.3,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+H Klaasen,,2026,Franchise D,150.0,982.3,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Shubman Gill,b4b99816,2024,Franchise A,150.0,1188.4,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Ishan Kishan,,2025,Franchise B,150.0,376.1,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+N Pooran,3241e3fd,2026,Franchise C,200.0,1057.6,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+R Parag,,2024,Franchise D,50.0,65.4,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+TM Head,12b610c2,2025,Franchise A,100.0,460.4,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+RA Jadeja,,2026,Franchise B,50.0,213.2,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+JC Buttler,99b75528,2024,Franchise C,200.0,1080.9,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+AR Patel,,2025,Franchise D,200.0,919.8,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+RM Patidar,c740ea83,2026,Franchise A,100.0,273.3,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+KL Rahul,,2024,Franchise B,100.0,108.3,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+SA Yadav,271f83cd,2025,Franchise C,50.0,292.2,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Dhruv Jurel,,2026,Franchise D,50.0,120.2,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+T Stubbs,85b3fab2,2024,Franchise A,150.0,153.9,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+S Dube,,2025,Franchise B,100.0,681.0,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Tilak Varma,b0482a1d,2026,Franchise C,150.0,431.0,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+YS Chahal,,2024,Franchise D,50.0,358.1,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+RR Pant,919a3be2,2025,Franchise A,50.0,346.5,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+SP Narine,,2026,Franchise B,150.0,821.7,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Shashank Singh,26989d80,2024,Franchise C,50.0,82.0,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+HH Pandya,,2025,Franchise D,150.0,718.2,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+RG Sharma,740742ef,2026,Franchise A,150.0,1064.9,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+JJ Bumrah,,2024,Franchise B,150.0,529.3,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Noor Ahmad,efc04be7,2025,Franchise C,150.0,212.2,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+SV Samson,,2026,Franchise D,150.0,557.0,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+CV Varun,5b7ab5a9,2024,Franchise A,150.0,307.7,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+AM Rahane,,2025,Franchise B,100.0,671.4,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+PJ Cummins,ded9240e,2026,Franchise C,100.0,785.1,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Kuldeep Yadav,,2024,Franchise D,100.0,513.0,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Not A Real Player,,2025,Franchise A,100,300,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Mohammed Siraj,,2025,Franchise B,abc,-5,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+B Kumar,,2024,Franchise A,100,400,sold,INR_lakh,SYNTHETIC DEMO — not real prices
+Abhishek Sharma,,2026,,100,,unsold,INR_lakh,SYNTHETIC DEMO — not real prices
+P Simran Singh,,2025,Franchise C,100,0,sold,INR_lakh,SYNTHETIC DEMO — not real prices

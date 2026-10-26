@@ -1,0 +1,3 @@
+player,registry_id,season,franchise,base_price,sold_price,auction_status,currency,source
+EXAMPLE — Player name,,2025,EXAMPLE — Franchise,200,450,sold,INR_lakh,"EXAMPLE — replace with a real, citable source"
+EXAMPLE — Another player,,2025,,100,,unsold,INR_lakh,EXAMPLE — not a real price

@@ -4,11 +4,12 @@ import plotly.graph_objects as go
 import streamlit as st
 from components import ui
 from core import data as D
+from core import roles as R
 
 MAX_COMPARE = 4  # categorical palette stays distinguishable for up to 4 series in lines/boxes
 
 
-def hero(name, p, players, teams, role):
+def hero(name, p, players, teams, role, reason):
     info = players.set_index("player").loc[name]
     spans, t = [], teams.sort_values("season_year")
     for r in t.itertuples():  # run-length group consecutive seasons with the same team
@@ -24,7 +25,7 @@ def hero(name, p, players, teams, role):
              ("Volatility (sd)", f"{p.pts.std(ddof=1):.1f}" if len(p) > 1 else "–")]
     st.markdown(f"""<div class="dl-hero"><div class="row">{ui.avatar_html(name)}<div>
         <h2>{ui.esc(name)}</h2>
-        <div class="meta">Cricsheet id {ui.esc(info.registry_id)}{alias} · {ui.esc(role)} (statistical rule) ·
+        <div class="meta">Cricsheet id {ui.esc(info.registry_id)}{alias} · <b>{ui.esc(role)}</b> ({R.LABEL}: {ui.esc(reason)}) ·
         {p.start_date.min():%b %Y} – {p.start_date.max():%b %Y}</div>
         <div class="chips">{team_chips}{f'<span>+{more} earlier spells</span>' if more > 0 else ''}</div></div></div>
         <div class="stats">{''.join(f'<div class="stat"><b>{v}</b><span>{k}</span></div>' for k, v in stats)}</div></div>""",
@@ -41,6 +42,16 @@ def main():
     ven = ui.multi("Venue", pm.venue.unique(), "f_venues")
     dmin, dmax = pm.start_date.min().date(), pm.start_date.max().date()
     dates = st.sidebar.date_input("Date range", value=st.session_state.get("f_dates", (dmin, dmax)), min_value=dmin, max_value=dmax, key="f_dates")
+    th = R.thresholds()
+    role_f = ui.multi("Role (filters the player list)", R.ROLES, "f_roles")
+    f = ui.apply(pm, seasons=seasons, opponents=opp, venues=ven, dates=dates)
+    stt = R.add_roles(D.player_stats(f), f, th) if len(f) else D.player_stats(pm).assign(role="Unknown", role_reason="no matches in view")
+    if role_f:
+        keep = set(stt[stt.role.isin(role_f)].player)
+        players = players[players.player.isin(keep)]
+        if players.empty:
+            st.info("No players have the selected role under the current filters and thresholds.")
+            return
 
     c1, c2 = st.columns([2, 3])
     plist = list(players.player)
@@ -48,18 +59,15 @@ def main():
                         format_func=lambda n: label[n], key="f_player")
     others = c2.multiselect(f"Compare with (up to {MAX_COMPARE - 1})", [n for n in players.player if n != name], max_selections=MAX_COMPARE - 1,
                             format_func=lambda n: label[n], key="f_compare", placeholder="Add players to compare")
-    ui.active_filters(Player=name, Compare=others, Seasons=f"{seasons[0]}–{seasons[1]}", Opponent=opp, Venue=ven,
+    ui.active_filters(Player=name, Compare=others, Roles=role_f, Seasons=f"{seasons[0]}–{seasons[1]}", Opponent=opp, Venue=ven,
                       Dates=f"{dates[0]} → {dates[1]}" if len(dates) == 2 else None)
 
-    f = ui.apply(pm, seasons=seasons, opponents=opp, venues=ven, dates=dates)
     p = f[f.player == name].sort_values("start_date")
     if p.empty:
         st.info(f"{name} has no matches under the current filters. Widen the season, date, opponent or venue filters.")
         return
-    stt = D.player_stats(f)
-    stt["role"] = D.classify(stt)
-    role = stt.set_index("player").loc[name, "role"]
-    hero(name, p, players, ts[ts.player == name], role)
+    rr = stt.set_index("player").loc[name]
+    hero(name, p, players, ts[ts.player == name], rr.role, rr.role_reason)
     st.write("")
 
     me = stt.set_index("player").loc[name]
@@ -99,7 +107,7 @@ def main():
         m = se.melt(["season_year", "matches", "team"], ["batting", "bowling", "dots"], var_name="component", value_name="avg")
         ui.chart(px.bar(m, x="season_year", y="avg", color="component", title="Average points per match by season (stacked components)",
                         labels={"season_year": "Season", "avg": "Points per match"}, hover_data={"matches": True, "team": True}), height=380)
-        st.dataframe(se.round(2), hide_index=True, width="stretch")
+        ui.table(se.round(2), hide_index=True, width="stretch")
     with tabs[2]:
         c1, c2 = st.columns(2)
         for col, by in ((c1, "opponent"), (c2, "venue")):
@@ -128,7 +136,7 @@ def main():
                             title="Distribution of match points", labels={"pts": "Points", "player": ""}))
             tb = stt[stt.player.isin(names)].set_index("player").loc[names][
                 ["role", "matches", "avg_pts", "median_pts", "max_pts", "std_pts", "cv", "runs", "strike_rate", "wickets", "economy"]].round(2)
-            st.dataframe(tb, width="stretch")
+            ui.table(tb, width="stretch")
             ui.download(tb.reset_index(), "player_comparison", key="dl_cmp")
 
 

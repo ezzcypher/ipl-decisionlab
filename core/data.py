@@ -100,18 +100,3 @@ def player_stats(pm):
     teams = pm.sort_values("start_date").groupby("player")["team"].agg(lambda x: x.iloc[-1])
     s["latest_team"] = teams
     return s.reset_index()
-
-
-def classify(stats, bat_bpm=8.0, bowl_bpm=9.0, min_matches=10):
-    """Transparent, configurable role rule (no role metadata in the source data).
-    Bats regularly  : balls faced per match >= bat_bpm
-    Bowls regularly : legal balls bowled per match >= bowl_bpm
-    """
-    bats = stats["balls_faced_pm"] >= bat_bpm
-    bowls = stats["balls_bowled_pm"] >= bowl_bpm
-    role = pd.Series("Limited role", index=stats.index)
-    role[bats & ~bowls] = "Batter"
-    role[bowls & ~bats] = "Bowler"
-    role[bats & bowls] = "All-rounder"
-    role[stats["matches"] < min_matches] = "Insufficient sample"
-    return role

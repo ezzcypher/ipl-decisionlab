@@ -41,6 +41,15 @@ def main():
         dict(label="Player-matches", value=f"{m['n']:,}", sub=f"{d.match_id.nunique()} matches"),
     ])
 
+    with st.expander("Limitations and how to read the metrics", expanded=False):
+        st.markdown("- **Lower MAE / RMSE is better.** RMSE weighs large misses more heavily than MAE.\n"
+                    "- **R² near 0** means the model explains almost none of the match-to-match variation; **negative R²** means it does worse "
+                    "than predicting the split's own mean.\n"
+                    "- The best model by validation MAE is the training-median constant; Ridge is best by RMSE. Neither is a reliable "
+                    "match-level forecaster — typical errors are 20–30 points.\n"
+                    "- Predictions for 2024–2026 are **retrospective**: made with information available before each match, evaluated afterwards. "
+                    "No fixtures, line-ups, injuries or pitch conditions are modelled.")
+        st.page_link("views/12_leaderboard.py", label="Full model leaderboard, per-season and per-player results, experiments →")
     t1, t2, t3, t4, t5 = st.tabs(["Player view", "Model comparison", "Errors", "Feature importance", "Artifacts"])
     pc = cols[model]
     with t1:
@@ -67,7 +76,7 @@ def main():
                               "⚠ small sample" if e["n"] < 10 else "sample ok for a description"]), unsafe_allow_html=True)
         out = p[["start_date", "season", "venue", "player", "pts", pc, "matches_before"]].rename(columns={pc: f"pred_{model}"})
         out["error"] = out.pts - out[f"pred_{model}"]
-        st.dataframe(ui.dates(out.round(2)), hide_index=True, width="stretch")
+        ui.table(ui.dates(out.round(2)), hide_index=True, width="stretch")
         ui.download(out, f"retrospective_predictions_{who.replace(' ', '_')}")
     with t2:
         rows = [{"model": k.replace(" (train median)", ""), "split": s_, "MAE": v["mae"], "RMSE": v["rmse"], "R²": v["r2"]}
@@ -81,7 +90,7 @@ def main():
                                 labels={metric: f"{metric} (points)", "model": ""}, text_auto=".2f"), height=340)
         for s_ in ("validation", "test"):
             st.markdown(f"**{s_.title()}**")
-            st.dataframe(mt[mt.split == s_].drop(columns="split").round(4), hide_index=True, width="stretch")
+            ui.table(mt[mt.split == s_].drop(columns="split").round(4), hide_index=True, width="stretch")
         b = mets["test_paired_bootstrap"]["xgboost_minus_median_baseline"]
         ui.note(f"<b>Is XGBoost better than the median?</b> On test it is worse by {b['estimate']:+.2f} MAE points "
                 f"(95% interval {b['ci95'][0]:+.2f} to {b['ci95'][1]:+.2f}, resampling whole matches). "
@@ -115,7 +124,7 @@ def main():
                             labels={"xgb_val_permutation_mae_increase": "MAE increase (points)", "feature": ""},
                             color_discrete_sequence=[ui.series(1)]), height=320)
         st.markdown("**Feature definitions** (all computed from the player's earlier matches only)")
-        st.dataframe(pd.DataFrame([
+        ui.table(pd.DataFrame([
             ("prev_pts", "points in the previous match"), ("avg_pts_prev3", "mean of the previous 3 matches (needs 3)"),
             ("avg_pts_prev5", "mean of the previous 5 matches (needs 5)"), ("std_pts_prev3", "population std of the previous 3"),
             ("trend_pts_prev3", "avg_pts_prev3 − avg_pts_prev5"), ("matches_before", "number of earlier IPL matches")],
@@ -134,7 +143,11 @@ def main():
         for name, e in errors.items():
             rows.append({"artifact": name, "status": "FAIL", "check": "load", "max abs diff": e})
         ui.status_table(pd.DataFrame(rows), ["artifact", "status", "check", "max abs diff"])
-        st.json({k: cfg[k] for k in ("label", "hyperparameters", "seed", "library_versions", "selection_rule")}, expanded=False)
+        with st.expander("Saved training configuration"):
+            rows = [("label", cfg["label"]), ("seed", cfg["seed"]), ("selection rule", cfg["selection_rule"])]
+            rows += [(f"{m} · {k}", v) for m, h in cfg["hyperparameters"].items() for k, v in h.items()]
+            rows += [(f"version · {k}", v) for k, v in cfg["library_versions"].items()]
+            ui.table(pd.DataFrame(rows, columns=["setting", "value"]).astype(str), key="cfg_tbl", page_size=40, sort=False)
         ui.note("<b>What forecasting would need.</b> Confirmed upcoming fixtures and playing XIs, then the same six features computed "
                 "from each player's latest matches. The saved models can score such rows, but the pipeline does not yet produce them, "
                 "and with R² near zero a forecast would carry very wide uncertainty.")

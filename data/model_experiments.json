@@ -1,0 +1,184 @@
+{
+  "label": "EXPERIMENTS \u2014 separate from the rebuilt Phase 6 models (which are unchanged)",
+  "protocol": "Offline model-improvement experiments (never run by the dashboard).\n\n    python3 -I scripts/model_experiments.py\n\nProtocol (fixed before looking at any test number):\n  1. Fit every candidate on the training split (2008\u20132021) only.\n  2. Score on validation (2022\u20132023). Selection rule: lowest validation MAE; ties \u2192 the simpler candidate.\n  3. Only then evaluate the selected candidate \u2014 and the training-median baseline for reference \u2014 once on test (2024\u20132026).\nExtra features use each player's EARLIER matches only. The original rebuilt artifacts in models/ are never touched;\noutputs go to models/experiments/ and data/model_experiments*.",
+  "selection_rule": "lowest validation MAE; ties \u2192 fewer features",
+  "selected": "HistGB absolute-error \u00b7 depth 3 \u00b7 leaf 50",
+  "selected_beats_median_on_validation": true,
+  "validation_mae_improvement_vs_median": 0.3566987609420096,
+  "validation_leaderboard": [
+    {
+      "candidate": "HistGB absolute-error \u00b7 depth 3 \u00b7 leaf 50",
+      "features": "base + history",
+      "n_features": 14,
+      "val_mae": 23.715989803534875,
+      "val_rmse": 32.752151176202375,
+      "val_r2": -0.050844697006209305,
+      "val_n": 3288
+    },
+    {
+      "candidate": "HistGB absolute-error \u00b7 depth None \u00b7 leaf 100",
+      "features": "base + history",
+      "n_features": 14,
+      "val_mae": 23.784566889069982,
+      "val_rmse": 32.770018095800815,
+      "val_r2": -0.05199152115022776,
+      "val_n": 3288
+    },
+    {
+      "candidate": "XGBoost absolute-error \u00b7 depth 3",
+      "features": "base + history",
+      "n_features": 14,
+      "val_mae": 23.877729733204898,
+      "val_rmse": 32.37457694725839,
+      "val_r2": -0.026755602156273817,
+      "val_n": 3288
+    },
+    {
+      "candidate": "XGBoost absolute-error \u00b7 depth 5",
+      "features": "base + history",
+      "n_features": 14,
+      "val_mae": 24.04565996961292,
+      "val_rmse": 32.43505213980624,
+      "val_r2": -0.030595111005083275,
+      "val_n": 3288
+    },
+    {
+      "candidate": "Training median (constant)",
+      "features": "\u2013",
+      "n_features": 0,
+      "val_mae": 24.072688564476884,
+      "val_rmse": 32.459447374289695,
+      "val_r2": -0.032145968028937544,
+      "val_n": 3288
+    },
+    {
+      "candidate": "Ridge \u03b1=1 \u00b7 base + history",
+      "features": "base + history",
+      "n_features": 14,
+      "val_mae": 24.436835908754123,
+      "val_rmse": 31.660003391283492,
+      "val_r2": 0.0180694068085947,
+      "val_n": 3288
+    },
+    {
+      "candidate": "Ridge \u03b1=10 \u00b7 base + history",
+      "features": "base + history",
+      "n_features": 14,
+      "val_mae": 24.43737418190252,
+      "val_rmse": 31.65993572611993,
+      "val_r2": 0.018073604055346193,
+      "val_n": 3288
+    },
+    {
+      "candidate": "Ridge \u03b1=100 \u00b7 base + history",
+      "features": "base + history",
+      "n_features": 14,
+      "val_mae": 24.442814472106306,
+      "val_rmse": 31.65932540408724,
+      "val_r2": 0.018111461715116017,
+      "val_n": 3288
+    },
+    {
+      "candidate": "Ridge \u03b1=1000 \u00b7 base + history",
+      "features": "base + history",
+      "n_features": 14,
+      "val_mae": 24.48797827106099,
+      "val_rmse": 31.659078714216026,
+      "val_r2": 0.018126763431767667,
+      "val_n": 3288
+    },
+    {
+      "candidate": "Player expanding median (no model)",
+      "features": "\u2013",
+      "n_features": 0,
+      "val_mae": 24.574209245742093,
+      "val_rmse": 33.528599296763346,
+      "val_r2": -0.10125957694707255,
+      "val_n": 3288
+    },
+    {
+      "candidate": "Ridge \u03b1=1000 \u00b7 base features",
+      "features": "base",
+      "n_features": 6,
+      "val_mae": 24.736463469527003,
+      "val_rmse": 31.73529086165119,
+      "val_r2": 0.013393793304112056,
+      "val_n": 3288
+    },
+    {
+      "candidate": "Ridge \u03b1=100 \u00b7 base features",
+      "features": "base",
+      "n_features": 6,
+      "val_mae": 24.75065480206094,
+      "val_rmse": 31.74738923767601,
+      "val_r2": 0.012641406432335356,
+      "val_n": 3288
+    },
+    {
+      "candidate": "Ridge \u03b1=10 \u00b7 base features",
+      "features": "base",
+      "n_features": 6,
+      "val_mae": 24.753307698965973,
+      "val_rmse": 31.75054770255665,
+      "val_r2": 0.012444937201646522,
+      "val_n": 3288
+    },
+    {
+      "candidate": "Ridge \u03b1=1 \u00b7 base features",
+      "features": "base",
+      "n_features": 6,
+      "val_mae": 24.75361656354676,
+      "val_rmse": 31.750929226092836,
+      "val_r2": 0.012421203578718898,
+      "val_n": 3288
+    }
+  ],
+  "test_after_selection": {
+    "selected": {
+      "mae": 23.77669354095437,
+      "rmse": 33.02642933483322,
+      "r2": -0.06542361510475203,
+      "n": 4992
+    },
+    "median_baseline": {
+      "mae": 24.057892628205128,
+      "rmse": 32.62662401400552,
+      "r2": -0.039784527133198244,
+      "n": 4992
+    },
+    "selected_minus_median_mae": {
+      "estimate": -0.28119908725075904,
+      "ci95": [
+        -0.4114707517081183,
+        -0.1476387494670602
+      ],
+      "unit": "match"
+    }
+  },
+  "extra_features": [
+    "exp_mean_pts",
+    "exp_median_pts",
+    "last10_mean_pts",
+    "season_prior_mean_pts",
+    "days_since_last",
+    "prior_bat_share",
+    "prior_balls_faced_pm",
+    "prior_balls_bowled_pm"
+  ],
+  "rows": {
+    "train": 18479,
+    "val": 3288,
+    "test": 4992
+  },
+  "versions": {
+    "python": "3.13.17",
+    "pandas": "3.0.5",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.4.1"
+  },
+  "original_artifacts_sha256": {
+    "preprocess_config_rebuilt.json": "1257f924433045cb3aac6cce97a346ddbe7f6c967a6a31f885c0a661eca0265b",
+    "ridge_rebuilt.joblib": "bac9e71978765e1ece574187c300981562e78c86b2c994daad504c9e1e73eb5a",
+    "xgboost_rebuilt.json": "9b2d845bd60f6fe06ed18ef91390d5a2b12f9daba1feaac5faec6f052e34d3f5"
+  }
+}
