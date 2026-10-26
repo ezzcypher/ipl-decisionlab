@@ -12,6 +12,7 @@ showErrorDetails = true
 
 [server]
 headless = true
+maxUploadSize = 5  # MB; the only upload is a small auction-price CSV
 
 [browser]
 gatherUsageStats = false

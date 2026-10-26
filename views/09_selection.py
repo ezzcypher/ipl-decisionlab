@@ -200,7 +200,7 @@ def main():
     pm, pr, mets, players = D.player_match(), D.predictions(), D.metrics(), D.table("players.parquet")
     seasons = ui.season_filter(pm.season_year)
     role_f = ui.multi("Role", R.ROLES, "f_roles")
-    teams = ui.multi("Latest team in view", pm.team.unique(), "f_teams")
+    teams = ui.multi("Latest team in view", pm.team.unique(), "f_sel_teams")
     th = R.thresholds()
     ui.active_filters(Seasons=f"{seasons[0]}–{seasons[1]}", Roles=role_f, Teams=teams, **{"Min matches": th["min_matches"]})
     t1, t2 = st.tabs(["Performance shortlist", "Auction prices & value"])

@@ -178,6 +178,22 @@ def test_theme_persists_across_navigation_and_filters():
     assert at.session_state["theme"] == "light"
 
 
+def test_team_filters_do_not_leak_between_pages():
+    keys = {"views/03_eda.py": "f_eda_teams", "views/06_roles.py": "f_teams", "views/09_selection.py": "f_sel_teams",
+            "views/10_teams.py": "f_team_compare"}
+    for f, k in keys.items():
+        assert f'"{k}"' in (ROOT / f).read_text(), (f, k)
+    at = app(page="10_teams.py", state={"f_team_compare": ["Mumbai Indians"]})
+    at.switch_page("views/09_selection.py").run()
+    assert not at.exception
+    assert not at.session_state["f_sel_teams"] if "f_sel_teams" in at.session_state else True
+
+
+def test_upload_size_is_limited():
+    cfg = (ROOT / ".streamlit" / "config.toml").read_text()
+    assert "maxUploadSize = 5" in cfg
+
+
 # ---------------------------------------------------------------- tables
 def test_table_component_formatting():
     from components.ui import _fmt

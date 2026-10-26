@@ -37,7 +37,7 @@ def main():
     ui.kpi_row([
         dict(label=f"{model} · MAE", value=f"{m['mae']:.2f}", tag=split, sub=f"best on this split: {best_mae.replace(' (train median)', '')}"),
         dict(label="RMSE", value=f"{m['rmse']:.2f}", sub="penalises large misses more"),
-        dict(label="R²", value=f"{m['r2']:.3f}", sub="≈ 0 → little better than a constant"),
+        dict(label="R²", value=f"{m['r2']:.3f}", sub="≈ 0: barely beats a constant" if m["r2"] >= 0 else "< 0: worse than predicting the mean"),
         dict(label="Player-matches", value=f"{m['n']:,}", sub=f"{d.match_id.nunique()} matches"),
     ])
 

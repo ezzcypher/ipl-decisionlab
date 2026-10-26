@@ -71,13 +71,13 @@ def main():
     st.write("")
 
     me = stt.set_index("player").loc[name]
-    elig = stt[stt.matches >= 10]
+    elig = stt[stt.matches >= th["min_matches"]]
     rank = int((elig.avg_pts > me.avg_pts).sum() + 1) if name in set(elig.player) else None
     last5 = p.tail(5).pts.mean()
     ui.kpi_row([
         dict(label="Median points", value=f"{me.median_pts:.1f}", sub=f"mean {me.avg_pts:.1f}"),
         dict(label="Recent form", value=f"{last5:.1f}", sub=f"mean of last {min(5, len(p))} matches in view"),
-        dict(label="Rank by average", value=f"#{rank} of {len(elig)}" if rank else "–", sub="players with ≥ 10 matches in view"),
+        dict(label="Rank by average", value=f"#{rank} of {len(elig)}" if rank else "–", sub=f"players with ≥ {th['min_matches']} matches in view"),
         dict(label="Consistency (CV)", value=f"{me.cv:.2f}" if pd.notna(me.cv) else "–", sub="sd ÷ mean · lower = steadier"),
         dict(label="Batting", value=f"{int(me.runs):,} runs", sub=f"SR {me.strike_rate:.1f} · avg {me.bat_avg:.1f}" if pd.notna(me.bat_avg) else f"SR {me.strike_rate:.1f}" if pd.notna(me.strike_rate) else "did not bat"),
         dict(label="Bowling", value=f"{int(me.wickets)} wkts", sub=f"econ {me.economy:.2f} · {me.overs:.1f} overs" if pd.notna(me.economy) else "did not bowl"),

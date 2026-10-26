@@ -11,7 +11,7 @@ def main():
               "Distributions, trends and outliers in the cleaned Phase 2 data (super overs excluded, names standardized, v1.1 identities).")
     season, inn = D.table("season_summary.parquet"), D.table("innings.parquet")
     seasons = ui.season_filter(season.season_year)
-    teams = ui.multi("Batting team", inn.batting_team.unique(), "f_teams", "Applies to innings, over and team charts")
+    teams = ui.multi("Batting team", inn.batting_team.unique(), "f_eda_teams", "Applies to innings, over and team charts")
     ui.active_filters(Seasons=f"{seasons[0]}–{seasons[1]}", Teams=teams)
 
     s = season[season.season_year.between(*seasons)].copy()

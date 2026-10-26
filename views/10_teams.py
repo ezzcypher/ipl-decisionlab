@@ -10,7 +10,7 @@ def main():
               "Team batting and bowling by season under standardized franchise names. Match results are not in the data, so no wins or losses are shown.")
     team, pm, inn = D.table("team_season.parquet"), D.player_match(), D.table("innings.parquet")
     seasons = ui.season_filter(team.season_year)
-    teams = ui.multi("Teams to compare", team.team.unique(), "f_teams")
+    teams = ui.multi("Teams to compare", team.team.unique(), "f_team_compare")
     focus = st.sidebar.selectbox("Team profile", sorted(team.team.unique()), key="f_team_focus",
                                  index=sorted(team.team.unique()).index("Mumbai Indians"))
     role_f = ui.multi("Role (contributors chart)", R.ROLES, "f_roles")

@@ -1,0 +1,12 @@
+IPL DecisionLab
+
+This project includes and is derived from data published by Cricsheet (https://cricsheet.org):
+"All Men's Indian Premier League match data in CSV format" (ipl_male_csv2.zip), snapshot covering
+18 April 2008 – 31 May 2026, stored at pipeline/inputs/ipl_male_csv2.zip.
+
+That data is licensed under the Open Data Commons Attribution License (ODC-By) v1.0:
+https://opendatacommons.org/licenses/by/1-0/ — the full licence text is inside the ZIP (LICENSE.txt).
+
+All derived datasets in data/ and pipeline/ (cleaned deliveries, fantasy scores, features, audits,
+model predictions) are derived from that data. Fantasy points use this project's own scoring rules;
+they are not official Dream11 or IPL figures.

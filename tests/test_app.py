@@ -246,8 +246,9 @@ def test_downloads_present_and_reflect_filters():
 
 
 # 14 missing files and empty data -----------------------------------------------------------------
-def test_missing_data_shows_message_not_traceback(tmp=Path("/tmp/claude-0/ipl_dl_empty")):
-    tmp.mkdir(parents=True, exist_ok=True)
+def test_missing_data_shows_message_not_traceback():
+    import tempfile
+    tmp = Path(tempfile.mkdtemp(prefix="ipl_dl_empty_"))
     code = (f"import os, sys; os.environ['IPL_DL_DATA']={str(tmp)!r}; sys.path.insert(0, {str(ROOT)!r});"
             f"from streamlit.testing.v1 import AppTest;"
             f"at=AppTest.from_file({str(ROOT / 'app.py')!r}, default_timeout=120); at.run();"

@@ -1,5 +1,25 @@
 # Changelog
 
+## v2.1 — GitHub portfolio release (branch `release/portfolio`)
+
+### Added
+- `pipeline/`: the cleaning, scoring, audit and modelling code that produces `data/` (previously kept outside the
+  repo), its inputs (raw Cricsheet snapshot + small recovered originals) and its 21-check test suite. A fresh clone
+  reproduces every dashboard data file and model artifact.
+- `docs/DATA.md` data dictionary, `docs/screenshots/`, `NOTICE` (Cricsheet ODC-By attribution),
+  `requirements-dev.txt`, `pipeline/README.md`.
+
+### Fixed
+- One sidebar key (`f_teams`) meant four different things on four pages; EDA, Selection and Teams now use their own keys.
+- R² caption on Predictive analytics now distinguishes "≈ 0" from negative values.
+- Player-explorer rank uses the shared minimum-matches threshold instead of a fixed 10.
+- Upload size limited to 5 MB (`server.maxUploadSize`).
+
+### Changed
+- README rewritten; `.gitignore` covers secrets, virtual environments and regenerated pipeline outputs.
+- `scripts/build_data.py` defaults to `./pipeline` and keeps the recorded archive inventory when the recovered archive is absent.
+
+
 ## v2 — Phase 7 upgrade (branch `upgrade/v2`)
 
 ### Added
