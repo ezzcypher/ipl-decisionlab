@@ -1,5 +1,5 @@
 {
-  "built_utc": "2026-10-26T04:43:01+00:00",
+  "built_utc": "2026-10-26T13:02:17+00:00",
   "recovery_workspace": "Stage B recovery (steps 1\u20136, 21/21 tests passed)",
   "scoring_version": "v1 rules, v1.1 identity",
   "season_map": {
@@ -140,6 +140,8 @@
     "audit_venue_names.csv": "4fc11426b77bf26f70f2d5c7d2468adce5c6b45eb9080a765b2044cfb189123f",
     "dismissal_season.parquet": "b88550d5e3d0a0b07ed3ffebf5d62e8a2a4bd55fd8ed016178b1522571bb13b8",
     "innings.parquet": "48e58fcc14ff0d3e2d53aa4a5fe7fcfd847804897b4771518c2be50dc77c957a",
+    "model_experiments.json": "4fa1c07db3ff1d7d4e43e8ac726ae376f70f1030485fe58d6e0124c1dd864bc9",
+    "model_experiments_test_predictions.csv": "ec57111bf07477aa624f9f3b3cd70b95c14241c841b3e4d811a77f43c620c05b",
     "over_season.parquet": "aaccbb6a80b0aacf0dc44c5afff408d112f38991637026ffa269e543a14d87a3",
     "phase6_feature_importance_rebuilt.csv": "9e5d14d835941a7228be0accda4facbded5763459ce21af00db13f2b0b39166c",
     "phase6_metrics_rebuilt.json": "cb4eb8ecead958a1be973f4975e7ed50582953241404e14084289382c403f7d3",
