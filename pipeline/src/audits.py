@@ -172,10 +172,12 @@ def main():
     pairs = {"Phase 2 Cleaned": "IPL_DecisionLab_Phase2_Cleaned", "Phase 4 Team Standardized": "IPL_DecisionLab_Team_Standardized",
              "Phase 3 PlayerMatch Points": "IPL_DecisionLab_Phase3_PlayerMatch_Points"}
     prov = {}
+    recorded = dict(reversed(l.split("  ", 1)) for l in (REP / "source_checksums.sha256").read_text().splitlines())
     for label, stem in pairs.items():
         a, b = rb.INP / f"{stem}.csv", rb.OUT / f"{stem}_rebuilt.csv"
-        prov[label] = {"recovered_file": a.name, "recovered_sha256": sha(a), "rebuilt_file": b.name, "rebuilt_sha256": sha(b),
-                       "byte_identical": sha(a) == sha(b), "rebuilt_by": "src/rebuild.py"}
+        ha = sha(a) if a.exists() else recorded[f"inputs/{stem}.csv"]  # large originals: recorded hash only
+        prov[label] = {"recovered_file": a.name, "recovered_sha256": ha, "compared_against": "file" if a.exists() else "recorded hash",
+                       "rebuilt_file": b.name, "rebuilt_sha256": sha(b), "byte_identical": ha == sha(b), "rebuilt_by": "pipeline/src/rebuild.py"}
     prov["Phase 2 Cleaned"]["caveat"] = "Venue mapping (venue_map_rebuilt.json) was recovered from the recovered Phase 2 itself; no original venue-mapping code survives."
     prov["reconstructed (NOT original)"] = {
         "IPL_DecisionLab_pm_reconstructed.csv": "Replayable from raw incl. super overs, dot=1, no milestone/duck, roster striker+bowler, no alias merge",
