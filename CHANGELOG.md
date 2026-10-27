@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.2 — cleaned dataset published (branch `release/portfolio`)
+
+- Added `data/IPL_DecisionLab_Phase2_Cleaned.csv` (295,557 × 28, 45.5 MB): the Phase 2 cleaned ball-by-ball data,
+  byte-identical to the recovered original and to the pipeline rebuild (SHA-256 checked by a new test).
+  Not read by the dashboard; documented in `docs/DATA.md` and the README.
+
 ## v2.1.1 — security hardening (branch `release/portfolio`)
 
 - `.streamlit/config.toml`: `showErrorDetails = false`, so the public app no longer shows tracebacks or server paths.

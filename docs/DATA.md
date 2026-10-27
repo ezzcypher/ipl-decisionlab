@@ -21,9 +21,49 @@ the file continuously; re-downloading it would give different data. See `NOTICE`
 | `pipeline/inputs/IPL_DecisionLab_pm_reconstructed.csv` | 2.1 MB | Flawed reconstruction made during recovery — kept only to explain the discrepancies. |
 | `pipeline/inputs/ipl_male_csv2.zip` | 6.5 MB | Raw Cricsheet snapshot (2,489 files incl. all_matches.csv; data to 31 May 2026). ODC-By 1.0. |
 
-Not committed (sizes 45 MB and 56 MB): the recovered original `IPL_DecisionLab_Phase2_Cleaned.csv` and
+Not committed here (sizes 45 MB and 56 MB): the recovered original `IPL_DecisionLab_Phase2_Cleaned.csv` and
 `IPL_DecisionLab_Team_Standardized.csv`. Their SHA-256 hashes are recorded, and the pipeline test checks the rebuilt files
-against those hashes, so byte-identity is still verified without them.
+against those hashes, so byte-identity is still verified without them. The Phase 2 file is published separately at
+`data/IPL_DecisionLab_Phase2_Cleaned.csv` (next section); `pipeline/inputs/` stays without it so the pipeline's behaviour
+is unchanged.
+
+## Cleaned ball-by-ball data (`data/IPL_DecisionLab_Phase2_Cleaned.csv`, committed)
+
+The Phase 2 cleaned delivery-level dataset, for anyone who wants the cleaned data without running the pipeline.
+The dashboard does **not** read this file (it uses the parquet bundle below).
+
+| Property | Value |
+| --- | --- |
+| Size | 45,521,417 bytes (45.5 MB) |
+| Shape | 295,557 rows × 28 columns, one row per delivery |
+| Coverage | 1,243 matches, 18 Apr 2008 – 31 May 2026 (`start_date`), 19 seasons, innings 1–2 only |
+| Order | Sorted by `start_date`, `match_id`, `innings`, `ball` (stable) |
+| SHA-256 | `4aaafe38c44bc5c3f50b34183a35105d4d5f405244901aa08a98dc55fd50b77f` — equals the recorded hash of the recovered original (`inputs/IPL_DecisionLab_Phase2_Cleaned.csv` in `pipeline/reports/source_checksums.sha256`) and of the pipeline's rebuild |
+| Source / licence | Derived from the Cricsheet snapshot in `pipeline/inputs/ipl_male_csv2.zip`; ODC-By 1.0, attribution in `NOTICE` |
+
+Columns: `match_id, season, start_date, venue, innings, ball, actual_delivery, batting_team, bowling_team, striker,
+non_striker, bowler, runs_off_bat, extras, wides, noballs, byes, legbyes, penalty, non_boundary, wicket_type,
+player_dismissed, other_wicket_type, other_player_dismissed, fielder_1, fielder_2, fielder_3, date_year`.
+
+What Phase 2 does to the raw Cricsheet `all_matches.csv`: removes the 175 super-over deliveries (innings 3–6, 16 matches),
+reduces 60 venue spellings to 38 names (the 28 renamed variants are listed in `pipeline/config/venue_map.json`), adds `actual_delivery` (the source writes the 10th
+ball of an over as `N.10`, which a float `ball` reads as `N.1`; the 42 repeated keys are kept as distinct deliveries) and
+`date_year`. Nothing is imputed; empty wicket/fielder cells mean "no such event".
+
+What it does **not** do yet (later pipeline stages): `batting_team`/`bowling_team` keep the 19 original franchise names
+(standardized to 15 in Phase 4), `season` keeps Cricsheet labels such as `2007/08` and `2020/21` (use `date_year` for the
+calendar year), and player names are not yet merged by registry id (identity v1.1 is applied in the scoring stage).
+
+Regenerate and verify:
+
+```bash
+python3 -I pipeline/src/rebuild.py      # writes pipeline/rebuilt/IPL_DecisionLab_Phase2_Cleaned_rebuilt.csv (git-ignored)
+sha256sum data/IPL_DecisionLab_Phase2_Cleaned.csv pipeline/rebuilt/IPL_DecisionLab_Phase2_Cleaned_rebuilt.csv
+grep Phase2_Cleaned pipeline/reports/source_checksums.sha256   # all three hashes must be identical
+```
+
+`tests/test_upgrade.py::test_published_phase2_csv_matches_recorded_checksum` checks the committed file against the
+recorded hash.
 
 ## Dashboard bundle (`data/`, committed — the app reads only this and `models/`)
 

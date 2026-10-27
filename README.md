@@ -78,6 +78,13 @@ content (only the build timestamp in `data/manifest.json` changes). Details: [`p
 Source: the [Cricsheet](https://cricsheet.org) all-IPL ball-by-ball CSV (ODC-By 1.0). Full file-by-file description:
 [`docs/DATA.md`](docs/DATA.md).
 
+**Cleaned ball-by-ball CSV:** [`data/IPL_DecisionLab_Phase2_Cleaned.csv`](data/IPL_DecisionLab_Phase2_Cleaned.csv) —
+295,557 deliveries × 28 columns (45.5 MB), 1,243 matches from 18 Apr 2008 to 31 May 2026, sorted by date, match, innings
+and ball. Derived from Cricsheet (ODC-By 1.0, see [`NOTICE`](NOTICE)). It is byte-identical to the recovered original and
+to `pipeline/src/rebuild.py`'s output (SHA-256 `4aaafe38…fd50b77f`). Team names, season labels and player identities are
+standardized in later stages — details and verification steps in
+[`docs/DATA.md`](docs/DATA.md#cleaned-ball-by-ball-data-dataipl_decisionlab_phase2_cleanedcsv-committed).
+
 Cleaning removed only 175 rows; everything else was standardizing or documenting. Nothing was imputed.
 
 | Issue | Size | Decision |
@@ -194,7 +201,7 @@ app.py                     Streamlit entry point (navigation, theme toggle)
 views/                     12 dashboard pages
 core/                      data loaders, scoring, roles, auction validation, theme tokens
 components/ui.py           KPI cards, themed tables, charts, filters, downloads
-data/                      dashboard bundle (parquet/CSV/JSON) — see docs/DATA.md
+data/                      dashboard bundle (parquet/CSV/JSON) + cleaned ball-by-ball CSV — see docs/DATA.md
 models/                    rebuilt model artifacts + training config
 scripts/build_data.py      pipeline outputs → data/ and models/
 scripts/model_experiments.py  offline model experiments

@@ -194,6 +194,18 @@ def test_upload_size_is_limited():
     assert "maxUploadSize = 5" in cfg
 
 
+def test_published_phase2_csv_matches_recorded_checksum():
+    f = ROOT / "data" / "IPL_DecisionLab_Phase2_Cleaned.csv"
+    recorded = {ln.split()[1]: ln.split()[0] for ln in (ROOT / "pipeline/reports/source_checksums.sha256").read_text().splitlines() if ln.strip()}
+    h = hashlib.sha256()
+    with open(f, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    assert h.hexdigest() == recorded["inputs/IPL_DecisionLab_Phase2_Cleaned.csv"]
+    head = pd.read_csv(f, nrows=0).columns
+    assert len(head) == 28 and list(head[:6]) == ["match_id", "season", "start_date", "venue", "innings", "ball"]
+
+
 def test_public_app_hides_error_details():
     import tomllib
     cfg = tomllib.loads((ROOT / ".streamlit" / "config.toml").read_text())
